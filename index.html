@@ -459,7 +459,7 @@ body::after{opacity:.1}
       <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
       <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
     </div>
-    <p class="bio">Essays, notes and photographs, written in Prishtina. Mostly about taste: clothes, films, rooms, and the people who stand in doorways. I watched films I was far too young for, with my mother, and nobody noticed I was paying attention. I still am. Trends are not discussed here, only judged.</p>
+    <p class="bio">Essays, notes and photographs from Prishtina. I notice things: the hem taken up by someone who didn’t love the coat, the man who stops dead at the top of the escalator, the film everyone calls a classic and nobody has finished. I was raised on cinema I was far too young for, and I have been paying attention ever since. Trends are not covered here. They are reviewed.</p>
     <nav aria-label="Site">
       <a href="#"><br></a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
     </nav>
@@ -617,7 +617,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2'];
+const OLD_BIO='Essays, notes and photographs, written in Prishtina. Mostly about taste: clothes, films, rooms, and the people who stand in doorways. I watched films I was far too young for, with my mother, and nobody noticed I was paying attention. I still am. Trends are not discussed here, only judged.';
 const pubBio=$('.bio')?.innerHTML;
 const pubAvatar=$('.avatar')?.cloneNode(true);
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
@@ -643,6 +644,8 @@ try{
     // bio-v1: fill the sidebar description, only if you left it empty
     const bio=$('.bio');
     if(!(d.fixes||[]).includes('bio-v1')&&bio&&pubBio&&!bio.textContent.trim())bio.innerHTML=pubBio;
+    // bio-v2: the sharper description replaces the first one, never words you wrote yourself
+    else if(!(d.fixes||[]).includes('bio-v2')&&bio&&pubBio&&bio.textContent.trim()===OLD_BIO)bio.innerHTML=pubBio;
   }
 }catch(e){}
 
