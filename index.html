@@ -459,6 +459,13 @@ body:not(.sq) .sq,body.sq .en{display:none!important}
 body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:var(--ink);color:var(--paper)}
 .side>*{flex-shrink:0}
 @media (min-width:901px){.side .avatar{margin-inline:auto}.side .who{text-align:center}}
+
+/* ---------- About lives under the name ---------- */
+.hero{height:auto;min-height:620px;padding-block:96px 88px}
+.title.masthead{position:relative;left:auto;top:auto;transform:none;margin:0 auto}
+.masthead .intro{max-width:34rem;margin:40px auto 0;padding-top:28px;border-top:1px solid var(--ink);text-align:left;font-size:17px;line-height:1.65}
+.masthead .intro p{margin:0 0 1em}
+.masthead .intro p:last-child{margin:0;font-style:italic}
 </style>
 
 <div class="shell">
@@ -497,8 +504,16 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
           <span class="r8">E</span><span class="r6">l</span><span class="r3">i</span><span class="gap"></span><span class="r1">V</span><span class="r2">u</span><span class="r7">l</span><span class="r6 tilt">a</span>
         </h1>
         <p class="tagline"><span class="en">criticism of clothes, films, rooms, and the people inside them</span><span class="sq" lang="sq">kritikë për rrobat, filmat, dhomat dhe njerëzit brenda tyre</span></p>
+        <div class="intro" id="about">
+          <div class="en"><p>Eli Vula writes criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
+          <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
+          <p>Written for anyone, anywhere, who has ever stood in a room and silently corrected it.</p></div>
+          <div class="sq" lang="sq"><p>Eli Vula shkruan kritikë ashtu siç disa njerëz bëjnë inventar: ngadalë dhe me dritat ndezur. Temat janë rrobat, filmat, dhomat dhe sjelljet, e pyetja është gjithmonë e njëjta: a po i kushtonte dikush vëmendje? Zakonisht përgjigjja është jo. Këtu, dikush po i kushtonte.</p>
+          <p>Ky nuk është blog për stil jetese. Asgjë nuk shitet, askush nuk sponsorizohet dhe askujt nuk do t’i thuhet ta dojë veten. Ka ese, ka shënime dhe ka fotografi që nuk u fshinë me arsye.</p>
+          <p>Shkruar për këdo, kudo, që ka qëndruar ndonjëherë në një dhomë dhe e ka korrigjuar në heshtje.</p></div>
+        </div>
       </div>
-      <span class="star" data-set="masthead" style="left:19%;top:64%;width:44px;height:44px;transform:rotate(-14deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"></path></svg></span>
+      <span class="star" data-set="masthead" style="left:23%;top:112px;width:40px;height:40px;transform:rotate(-14deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"></path></svg></span>
       <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
@@ -515,24 +530,6 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
       <!-- post 3 -->
       
 
-      <article class="post about" id="about">
-        <div class="gutter left"></div>
-        <div class="text">
-          <div class="meta"><span class="cat"><span class="en">about</span><span class="sq" lang="sq">rreth</span></span></div>
-          <h3><span class="en">who is <mark>paying attention</mark></span><span class="sq" lang="sq">kush po <mark>i kushton vëmendje</mark></span></h3>
-          <div class="en">
-          <p>Eli Vula writes criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
-          <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
-          <p>Written for anyone, anywhere, who has ever stood in a room and silently corrected it.</p>
-        </div>
-          <div class="sq" lang="sq">
-          <p>Eli Vula shkruan kritikë ashtu siç disa njerëz bëjnë inventar: ngadalë dhe me dritat ndezur. Temat janë rrobat, filmat, dhomat dhe sjelljet, e pyetja është gjithmonë e njëjta: a po i kushtonte dikush vëmendje? Zakonisht përgjigjja është jo. Këtu, dikush po i kushtonte.</p>
-          <p>Ky nuk është blog për stil jetese. Asgjë nuk shitet, askush nuk sponsorizohet dhe askujt nuk do t’i thuhet ta dojë veten. Ka ese, ka shënime dhe ka fotografi që nuk u fshinë me arsye.</p>
-          <p>Shkruar për këdo, kudo, që ka qëndruar ndonjëherë në një dhomë dhe e ka korrigjuar në heshtje.</p>
-        </div>
-        </div>
-        <div class="gutter right"></div>
-      </article>
     </div>
 
     <footer class="end">
@@ -659,7 +656,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1'];
+const pubIntro=$('.masthead .intro')?.cloneNode(true);
 const BILINGUAL=['.bio','.side nav','.side .lang','.side .block:not(.now-block)','.side .now-block','.masthead .kicker','.masthead .tagline','.end p','#about'];
 const pubParts=BILINGUAL.map(s=>[s,$(s)?.cloneNode(true)]);
 const pubAvatar=$('.avatar')?.cloneNode(true);
@@ -694,6 +692,13 @@ try{
       const feed=$('.feed');if(feed)feed.id='essays';
       $$('.side h2,.side .url').forEach(x=>x.innerHTML=x.innerHTML.replace(/^(?:\s|&nbsp;)+/,''));
     }
+    // about-top-v1: About moves from the bottom of the page to under your name
+    if(!(d.fixes||[]).includes('about-top-v1')){
+      $$('.feed #about').forEach(e=>e.remove());
+      const tl=$('.masthead .tagline');
+      if(tl&&pubIntro&&!$('.masthead .intro'))tl.after(pubIntro);
+      $$('.hero .star[data-set="masthead"]').forEach(s=>{if(s.style.top==='64%'){s.style.left='23%';s.style.top='112px';s.style.width=s.style.height='40px'}});
+    }
   }
 }catch(e){}
 
@@ -701,7 +706,7 @@ let toastT;
 function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,3200)}
 
 const MOVABLE='.photo,.note,.stamp,.scrawl,.star,.title,.sticker,.cutword,.ransom>span:not(.gap)';
-const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom>span:not(.gap),.issue,.kicker,.tagline,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
+const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom>span:not(.gap),.issue,.kicker,.tagline,.intro,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
 const ISLANDS='.text .post-foot,.text .photo';
 const ISLAND_TEXT='.post-foot .t';
 const within=(sel,root)=>[...(root.matches&&root.matches(sel)?[root]:[]),...$$(sel,root)];
