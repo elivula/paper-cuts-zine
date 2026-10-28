@@ -293,6 +293,7 @@ a{color:inherit}
 .dock .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .dock .sep{width:1px;align-self:stretch;background:rgba(236,235,229,.3)}
 .dock .tiny{opacity:.7;padding:0 4px}
+body:not(.owner) .dock,body:not(.owner) .hint{display:none}
 .dock .dock-edit,.dock .sel-tools{display:none}
 .editing .dock .dock-edit{display:flex}
 .editing.has-sel .dock .sel-tools{display:flex}
@@ -544,7 +545,7 @@ a{color:inherit}
 <div class="toast" id="toast" hidden></div>
 <div class="export" id="connect" hidden>
   <div class="row"><b>connect your github (one time only)</b><button type="button" id="connect-close">close</button></div>
-  <p>only the owner of this zine can publish. everyone else can still play, but their changes stay on their own screen.</p>
+  <p>this is how the site knows it's you. connect once on each device you edit from, and editing stays on for that device.</p>
   <ol>
     <li>open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
     <li>name it <b>paper cuts</b>, and set expiration to whatever you like</li>
@@ -570,11 +571,16 @@ document.querySelectorAll('.like').forEach(b=>{
 
 /* ================= layout editor ================= */
 const KEY='papercuts-layout-v1';
-// the published layout (layout.json) is what everyone sees; a newer unpublished draft in this browser wins over it
+const REPO='elivula/paper-cuts-zine',BRANCH='main',TOKEN_KEY='papercuts-gh-token';
+const getToken=()=>{try{return localStorage.getItem(TOKEN_KEY)}catch(e){return null}};
+// readers only ever see the published layout; editing exists on the owner's connected devices, or via the #edit link
+const owner=!!getToken()||location.hash==='#edit';
+document.body.classList.toggle('owner',owner);
+// the published layout (layout.json) is what everyone sees; the owner's newer unpublished draft wins over it on their device
 const valid=p=>p&&p.photos&&p.added;
 const imgCache={}; // published image path -> photo still in memory, until github serves the file
 let state={photos:{},added:[]},local=null,pub=null;
-try{local=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(owner)try{local=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 try{const r=await fetch('layout.json?t='+Date.now(),{cache:'no-store'});if(r.ok)pub=await r.json()}catch(e){}
 if(valid(local)&&(!valid(pub)||(local.savedAt||0)>=(pub.savedAt||0)))state=local;
 else if(valid(pub))state=pub;
@@ -796,8 +802,6 @@ $('#replace-input').addEventListener('change',async e=>{
 });
 
 /* publish to github: one commit with layout.json plus any new photos in images/ */
-const REPO='elivula/paper-cuts-zine',BRANCH='main',TOKEN_KEY='papercuts-gh-token';
-const getToken=()=>{try{return localStorage.getItem(TOKEN_KEY)}catch(e){return null}};
 async function gh(path,opt={},token=getToken()){
   const r=await fetch('https://api.github.com/repos/'+REPO+path,{...opt,headers:{
     Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
@@ -868,7 +872,7 @@ $('#token-save').addEventListener('click',async()=>{
 });
 $('#token-forget').addEventListener('click',()=>{
   try{localStorage.removeItem(TOKEN_KEY)}catch(e){}
-  toast('this device is disconnected');
+  toast('this device is disconnected. editing goes away when you leave the page');
 });
 let resetArmed=false,resetT;
 $('#reset-btn').addEventListener('click',e=>{
