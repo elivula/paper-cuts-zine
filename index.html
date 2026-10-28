@@ -252,27 +252,55 @@ a{color:inherit}
   font-family:var(--f-hand);font-size:22px;color:var(--pink);transform:rotate(-4deg);
 }
 
-/* ---------- your own photos layer ---------- */
+/* ---------- things you add: photos, text ---------- */
 .board{position:absolute;inset:0;pointer-events:none;z-index:8}
-.board .photo{position:absolute;pointer-events:auto}
+.board>*{position:absolute;pointer-events:auto}
 .board .img{aspect-ratio:var(--ar,4/5)}
+.sticker{
+  z-index:6;font-family:var(--f-hand);font-size:26px;line-height:1.15;color:var(--blue);
+  max-width:340px;min-width:40px;
+}
+.sticker.s-pink{color:var(--pink)}
+.sticker.s-paper{background:var(--hi);color:var(--ink);padding:8px 14px;box-shadow:3px 4px 0 rgba(0,0,0,.2)}
+.sticker.s-label{background:var(--ink);color:var(--paper);font-family:var(--f-type);font-size:16px;padding:4px 10px}
+.star svg{display:block;width:100%;height:100%}
+.pink{color:var(--pink)}
+mark{background:linear-gradient(transparent 55%,var(--hi) 55% 92%,transparent 92%);color:inherit;padding:0 2px}
+/* everything that isn't a photo moves with these, on top of its own tilt */
+:is(.note,.stamp,.scrawl,.star,.title,.sticker){translate:var(--dx,0px) var(--dy,0px);rotate:var(--r2,0deg);scale:var(--s,1)}
 
-/* ---------- layout editor ---------- */
-.h-rot,.h-size{display:none}
+/* ---------- editor (owner only) ---------- */
+.editing [contenteditable="true"]{outline:none;cursor:text}
+.editing [contenteditable="true"]:hover{box-shadow:0 0 0 1.5px rgba(50,85,164,.3)}
+.editing [contenteditable="true"]:focus{box-shadow:0 0 0 2px var(--blue)}
+.editing [contenteditable="true"]:empty::before{content:"type here";color:var(--ink-soft)}
+.editing .photo figcaption:empty::before{content:"write a caption"}
+.editing .photo:not(.sel) figcaption:empty::before{content:""}
 .editing .photo{cursor:grab;touch-action:none;outline:1.5px dashed rgba(50,85,164,.45);outline-offset:4px}
-.editing .photo.dragging{cursor:grabbing}
-.editing .photo.sel{outline:2px dashed var(--pink)}
-.editing .photo.sel .h-rot,.editing .photo.sel .h-size{
-  display:block;position:absolute;z-index:4;width:22px;height:22px;
+.editing .star{cursor:grab;touch-action:none}
+.editing :is(.note,.stamp,.scrawl,.title,.sticker,.star){outline:1.5px dashed rgba(255,72,176,.4);outline-offset:6px}
+.editing .dragging{cursor:grabbing}
+.editing .sel{outline:2px dashed var(--pink)!important}
+.editing .avatar{cursor:pointer}
+.h-rot,.h-size,.h-move{display:none}
+.editing .sel>:is(.h-rot,.h-size,.h-move){
+  display:block;position:absolute;z-index:4;width:24px;height:24px;touch-action:none;
   background:var(--pink);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4);
 }
 .h-rot{top:-16px;right:-16px;border-radius:50%;cursor:alias}
-.h-rot::after{content:"⟳";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
 .h-size{bottom:-16px;right:-16px;cursor:nwse-resize}
-.editing .photo figcaption{cursor:text;outline:none}
-.editing .photo figcaption:focus{background:var(--hi)}
-.editing .photo figcaption:empty::before{content:"write a caption";color:var(--ink-soft)}
-.editing .photo:not(.sel) figcaption:empty::before{content:""}
+.h-move{top:-16px;left:-16px;border-radius:4px;cursor:move}
+:is(.h-rot,.h-move,.h-size)::after{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font:13px/1 sans-serif}
+.h-rot::after{content:"⟳"}
+.h-move::after{content:"✥"}
+.h-size::after{content:"⤡"}
+.post-tools{
+  position:absolute;top:10px;right:max(16px,env(safe-area-inset-right,0px));z-index:9;
+  display:flex;flex-wrap:wrap;gap:4px;font-family:var(--f-type);font-size:12px;
+}
+.post-tools button{font:inherit;background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);padding:3px 8px;cursor:pointer}
+.post-tools button:hover{background:var(--ink);color:var(--paper)}
+.post-tools .warn{background:#d23b3b;border-color:#d23b3b;color:#fff}
 
 .dock{
   position:fixed;left:50%;transform:translateX(-50%);z-index:60;
@@ -283,6 +311,11 @@ a{color:inherit}
   font-family:var(--f-type);font-size:13px;
   box-shadow:4px 4px 0 var(--pink);
 }
+.editing .dock{
+  left:0;right:0;bottom:0;transform:none;width:auto;max-width:none;
+  padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
+  box-shadow:0 -4px 0 var(--pink);
+}
 .dock button,.dock .btn{
   font:inherit;color:inherit;background:transparent;border:1.5px solid rgba(236,235,229,.35);
   padding:5px 10px;cursor:pointer;white-space:nowrap;line-height:1.2;
@@ -291,14 +324,17 @@ a{color:inherit}
 .dock .primary{background:var(--pink);border-color:var(--pink);color:#fff}
 .dock .primary:hover{background:#fff;color:var(--ink)}
 .dock .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.dock .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-right:2px}
 .dock .sep{width:1px;align-self:stretch;background:rgba(236,235,229,.3)}
-.dock .tiny{opacity:.7;padding:0 4px}
+.dock .tip{flex-basis:100%;text-align:center;font-size:12px;opacity:.7}
 body:not(.owner) .dock,body:not(.owner) .hint{display:none}
-.dock .dock-edit,.dock .sel-tools{display:none}
+.dock .dock-edit,.dock .sel-tools,.dock .tip{display:none}
 .editing .dock .dock-edit{display:flex}
+.editing .dock .tip{display:block}
+.editing #edit-toggle{order:2}
 .editing.has-sel .dock .sel-tools{display:flex}
-.editing.has-sel .no-sel-msg{display:none}
-.editing{padding-bottom:140px}
+body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .dock .only-frame{display:none}
+.editing{padding-bottom:190px}
 .dock .warn{background:#d23b3b;border-color:#d23b3b;color:#fff}
 
 .toast{
@@ -412,8 +448,8 @@ body:not(.owner) .dock,body:not(.owner) .hint{display:none}
 
       <div class="note" style="left:6%;top:47%">new stuff<br>below ↓</div>
       <div class="stamp hide-sm" style="right:34%;top:68%;transform:rotate(-8deg)">handmade</div>
-      <svg class="star" viewBox="0 0 64 64" style="left:46%;bottom:60px;transform:rotate(12deg)" aria-hidden="true"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"/></svg>
-      <div class="hint">tap "edit layout" to move stuff ↓</div>
+      <span class="star" style="left:46%;bottom:60px;transform:rotate(12deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+      <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
     <div class="feed">
@@ -519,28 +555,40 @@ body:not(.owner) .dock,body:not(.owner) .hint{display:none}
   </main>
 </div>
 
-<div class="dock" role="toolbar" aria-label="Layout editor">
-  <button type="button" id="edit-toggle" class="primary">✎ edit layout</button>
+<div class="dock" role="toolbar" aria-label="Editing tools">
+  <span class="tip">click any words to type · drag photos to move them · click a note or the title, then drag its pink ✥ · ⟳ turns, ⤡ resizes</span>
+  <button type="button" id="edit-toggle" class="primary">✎ edit</button>
   <div class="dock-edit grp">
-    <label class="btn" for="add-input">+ add photos</label>
-    <input id="add-input" type="file" accept="image/*" multiple hidden>
-    <span class="tiny no-sel-msg">click a photo to select it</span>
-    <div class="sel-tools grp">
-      <span class="sep"></span>
-      <button type="button" data-act="rotl" aria-label="Rotate left">⟲</button>
-      <button type="button" data-act="rotr" aria-label="Rotate right">⟳</button>
+    <div class="grp"><span class="lbl">add</span>
+      <button type="button" data-add="photo">+ photo</button>
+      <button type="button" data-add="text">+ text</button>
+      <button type="button" data-add="post">+ post</button>
+      <button type="button" data-add="spread">+ photo page</button>
+    </div>
+    <span class="sep"></span>
+    <div class="grp"><span class="lbl">words</span>
+      <button type="button" data-fmt="bold" aria-label="Bold"><b>B</b></button>
+      <button type="button" data-fmt="italic" aria-label="Italic"><i>I</i></button>
+      <button type="button" data-fmt="hi">highlight</button>
+      <button type="button" data-fmt="pink">pink</button>
+      <button type="button" data-fmt="quote">big quote</button>
+      <button type="button" data-fmt="link">link</button>
+    </div>
+    <div class="sel-tools grp"><span class="sep"></span><span class="lbl">selected</span>
+      <button type="button" data-act="rotl" aria-label="Turn left">⟲</button>
+      <button type="button" data-act="rotr" aria-label="Turn right">⟳</button>
       <button type="button" data-act="smaller" aria-label="Smaller">−</button>
       <button type="button" data-act="bigger" aria-label="Bigger">+</button>
-      <button type="button" data-act="frame" id="frame-btn">frame: tape</button>
-      <label class="btn" for="replace-input">swap pic</label>
-      <input id="replace-input" type="file" accept="image/*" hidden>
+      <button type="button" data-act="frame" id="frame-btn" class="only-frame">frame</button>
+      <button type="button" data-act="swap" class="only-photo">swap pic</button>
       <button type="button" data-act="front">to front</button>
       <button type="button" data-act="delete">delete</button>
     </div>
     <span class="sep"></span>
     <button type="button" id="publish-btn" class="primary">publish</button>
-    <button type="button" id="reset-btn">reset</button>
+    <button type="button" id="reset-btn">undo all</button>
   </div>
+  <input id="pic-input" type="file" accept="image/*" hidden>
 </div>
 <div class="toast" id="toast" hidden></div>
 <div class="export" id="connect" hidden>
@@ -558,51 +606,165 @@ body:not(.owner) .dock,body:not(.owner) .hint{display:none}
 </div>
 
 <script type="module">
-// like buttons
-document.querySelectorAll('.like').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const on=b.getAttribute('aria-pressed')!=='true';
-    b.setAttribute('aria-pressed',on);
-    const n=b.parentElement.querySelector('.notes');
-    const v=parseInt(n.textContent.replace(/\D/g,''),10)+(on?1:-1);
-    n.textContent=v.toLocaleString('en-US')+' notes';
-  });
+// like buttons (delegated, so new posts get them too)
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.like');
+  if(!b||document.body.classList.contains('editing'))return;
+  const on=b.getAttribute('aria-pressed')!=='true';
+  b.setAttribute('aria-pressed',on);
+  const n=b.parentElement.querySelector('.notes');
+  if(!n)return;
+  const v=(parseInt(n.textContent.replace(/\D/g,''),10)||0)+(on?1:-1);
+  n.textContent=v.toLocaleString('en-US')+' notes';
 });
 
-/* ================= layout editor ================= */
-const KEY='papercuts-layout-v1';
-const REPO='elivula/paper-cuts-zine',BRANCH='main',TOKEN_KEY='papercuts-gh-token';
-const getToken=()=>{try{return localStorage.getItem(TOKEN_KEY)}catch(e){return null}};
-// readers only ever see the published layout; editing exists on the owner's connected devices, or via the #edit link
-const owner=!!getToken()||location.hash==='#edit';
-document.body.classList.toggle('owner',owner);
-// the published layout (layout.json) is what everyone sees; the owner's newer unpublished draft wins over it on their device
-const valid=p=>p&&p.photos&&p.added;
-const imgCache={}; // published image path -> photo still in memory, until github serves the file
-let state={photos:{},added:[]},local=null,pub=null;
-if(owner)try{local=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-try{const r=await fetch('layout.json?t='+Date.now(),{cache:'no-store'});if(r.ok)pub=await r.json()}catch(e){}
-if(valid(local)&&(!valid(pub)||(local.savedAt||0)>=(pub.savedAt||0)))state=local;
-else if(valid(pub))state=pub;
+/* ================= editor, only on the owner's devices =================
+   the page itself is the source of truth: you edit the real page, and publish
+   commits it to github as index.html (new photos go to images/) */
+const REPO='elivula/paper-cuts-zine',BRANCH='main',API='https://api.github.com/repos/'+REPO;
+const TOKEN_KEY='papercuts-gh-token',DRAFT_KEY='papercuts-draft-v2';
+const store={
+  get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},
+  set:(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}},
+  del:k=>{try{localStorage.removeItem(k)}catch(e){}},
+};
+if(store.get(TOKEN_KEY)||location.hash==='#edit')startEditor();
 
+function startEditor(){
 const $=s=>document.querySelector(s);
-const board=$('#board'),toastEl=$('#toast');
+const $$=(s,root=document)=>[...root.querySelectorAll(s)];
+const shell=$('.shell'),toastEl=$('#toast'),connectBox=$('#connect'),pubBtn=$('#publish-btn'),picInput=$('#pic-input');
+const publishedAt=()=>+($('meta[name="published-at"]')?.content||0);
+document.body.classList.add('owner');
+store.del('papercuts-layout-v1');
+
+// bring back unpublished changes made on this device
+try{
+  const d=JSON.parse(store.get(DRAFT_KEY));
+  if(d&&d.html&&d.savedAt>=publishedAt())shell.innerHTML=d.html;
+}catch(e){}
+
 let toastT;
-function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,2600)}
-let saveT;
-function save(){
-  clearTimeout(saveT);
-  saveT=setTimeout(()=>{
-    state.savedAt=Date.now();
-    try{localStorage.setItem(KEY,JSON.stringify(state))}
-    catch(e){toast("couldn't save, browser storage is full or blocked. changes stay until you reload")}
-  },150);
+function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,3200)}
+
+const MOVABLE='.photo,.note,.stamp,.scrawl,.star,.title,.sticker';
+const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom span:not(.gap),.issue,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
+const ISLANDS='.text .post-foot,.text .photo';
+const ISLAND_TEXT='.post-foot .t';
+const within=(sel,root)=>[...(root.matches&&root.matches(sel)?[root]:[]),...$$(sel,root)];
+
+// strip everything the editor adds, so drafts and published pages are clean
+function clean(root){
+  within('.h-rot,.h-size,.h-move,.post-tools,grammarly-extension,grammarly-desktop-integration',root).forEach(e=>e.remove());
+  within('[contenteditable]',root).forEach(e=>e.removeAttribute('contenteditable'));
+  within('.sel,.dragging',root).forEach(e=>e.classList.remove('sel','dragging'));
+  within('*',root).forEach(e=>{
+    [...e.attributes].forEach(a=>{if(a.name.startsWith('data-gr')||a.name==='data-gramm')e.removeAttribute(a.name)});
+    if(e.getAttribute('class')==='')e.removeAttribute('class');
+  });
+  return root;
+}
+const snapshot=()=>clean(shell.cloneNode(true)).innerHTML;
+addEventListener('pagehide',()=>{if(dirty&&!resetting)saveNow()});
+
+let saveT,dirty=false,resetting=false;
+function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(()=>saveNow(),400)}
+function saveNow(at=Date.now()){
+  clearTimeout(saveT);dirty=false;
+  if(!store.set(DRAFT_KEY,JSON.stringify({html:snapshot(),savedAt:at})))
+    toast("couldn't keep a backup on this device (lots of new photos?). publish to save them");
 }
 
+/* ---------- edit mode ---------- */
+let editing=false,sel=null,zTop=30;
+function prep(root){
+  within(TEXT,root).forEach(e=>e.contentEditable='true');
+  within(ISLANDS,root).forEach(e=>e.contentEditable='false');
+  within(ISLAND_TEXT,root).forEach(e=>e.contentEditable='true');
+  within('.post,.spread',root).forEach(addSectionTools);
+}
+function setEditing(on){
+  editing=on;
+  document.body.classList.toggle('editing',on);
+  $('#edit-toggle').textContent=on?'✓ done':'✎ edit';
+  if(on)prep(shell);
+  else{select(null);clean(shell);saveNow()}
+}
+$('#edit-toggle').addEventListener('click',()=>setEditing(!editing));
+try{document.execCommand('defaultParagraphSeparator',false,'p')}catch(e){}
+shell.addEventListener('input',()=>{if(editing)save()});
+// paste as plain words, so text from other apps doesn't bring its own styling
+shell.addEventListener('paste',e=>{
+  if(!editing||!e.target.isContentEditable)return;
+  e.preventDefault();
+  document.execCommand('insertText',false,e.clipboardData.getData('text/plain'));
+});
+
+/* ---------- selecting, moving, turning, resizing ---------- */
+const isPhoto=el=>el.classList.contains('photo');
+const rotVar=el=>isPhoto(el)?'--r':'--r2';
+const num=(el,v,d=0)=>{const x=parseFloat(el.style.getPropertyValue(v));return isNaN(x)?d:x};
+const setNum=(el,v,x,unit)=>el.style.setProperty(v,x+unit);
+
+function select(el){
+  if(sel&&sel!==el){sel.classList.remove('sel');within('.h-rot,.h-size,.h-move',sel).forEach(h=>h.remove())}
+  sel=el;
+  document.body.classList.toggle('has-sel',!!el);
+  document.body.classList.toggle('sel-photo',!!el&&isPhoto(el));
+  document.body.classList.toggle('sel-sticker',!!el&&el.classList.contains('sticker'));
+  if(!el)return;
+  el.classList.add('sel');
+  if(!el.querySelector(':scope>.h-rot')){
+    for(const c of isPhoto(el)?['h-rot','h-size']:['h-move','h-rot','h-size']){
+      const h=document.createElement('span');h.className=c;h.contentEditable='false';el.append(h);
+    }
+  }
+  $('#frame-btn').textContent=isPhoto(el)?'frame: '+FRAME_NAME[frameOf(el)]:'style';
+}
+
+let drag=null;
+document.addEventListener('pointerdown',e=>{
+  if(!editing||(e.pointerType==='mouse'&&e.button!==0))return;
+  if(e.target.closest('.dock,.export,.post-tools,.toast'))return;
+  if(e.target.closest('.avatar')){e.preventDefault();pick('avatar');return}
+  const el=e.target.closest(MOVABLE);
+  if(!el||!shell.contains(el)){select(null);return}
+  select(el);
+  const c=e.target.classList;
+  const mode=c.contains('h-rot')?'rot':c.contains('h-size')?'size':(c.contains('h-move')||!e.target.isContentEditable)?'move':null;
+  if(!mode)return; // clicked into its words: just type
+  const b=el.getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2;
+  drag={el,mode,pid:e.pointerId,x:e.clientX,y:e.clientY,
+    dx:num(el,'--dx'),dy:num(el,'--dy'),r:num(el,rotVar(el)),s:num(el,'--s',1),cx,cy,
+    a:Math.atan2(e.clientY-cy,e.clientX-cx),d:Math.hypot(e.clientX-cx,e.clientY-cy)||1};
+  el.classList.add('dragging');
+  try{e.target.setPointerCapture(e.pointerId)}catch(err){}
+  e.preventDefault();
+});
+document.addEventListener('pointermove',e=>{
+  if(!drag||e.pointerId!==drag.pid)return;
+  const el=drag.el;
+  if(drag.mode==='move'){
+    setNum(el,'--dx',Math.round(drag.dx+e.clientX-drag.x),'px');
+    setNum(el,'--dy',Math.round(drag.dy+e.clientY-drag.y),'px');
+  }else if(drag.mode==='rot'){
+    let deg=drag.r+(Math.atan2(e.clientY-drag.cy,e.clientX-drag.cx)-drag.a)*180/Math.PI;
+    if(e.shiftKey)deg=Math.round(deg/15)*15;
+    setNum(el,rotVar(el),Math.round(deg*10)/10,'deg');
+  }else{
+    const d=Math.hypot(e.clientX-drag.cx,e.clientY-drag.cy);
+    setNum(el,'--s',Math.round(Math.min(4,Math.max(.3,drag.s*d/drag.d))*100)/100,'');
+  }
+});
+const endDrag=e=>{if(!drag||e.pointerId!==drag.pid)return;drag.el.classList.remove('dragging');drag=null;save()};
+document.addEventListener('pointerup',endDrag);
+document.addEventListener('pointercancel',endDrag);
+
+/* ---------- frames for photos, styles for added text ---------- */
 const FRAMES=['tape','corner','pin','torn','plain','raw'];
 const FRAME_NAME={tape:'tape',corner:'corner tape',pin:'pin',torn:'torn edge',plain:'polaroid',raw:'just the pic'};
 const FRAME_CLS={tape:'',corner:'tape-corners',pin:'pin',torn:'torn bare',plain:'no-tape',raw:'bare no-tape'};
-const ALLCLS=['tape-corners','pin','torn','bare','no-tape'];
+const STICKER_STYLES=['','s-pink','s-paper','s-label'];
 function frameOf(el){
   if(el.classList.contains('torn'))return'torn';
   if(el.classList.contains('bare'))return'raw';
@@ -612,244 +774,277 @@ function frameOf(el){
   return'tape';
 }
 function setFrame(el,f){
-  ALLCLS.forEach(c=>el.classList.remove(c));
+  el.classList.remove('tape-corners','pin','torn','bare','no-tape');
   FRAME_CLS[f].split(' ').filter(Boolean).forEach(c=>el.classList.add(c));
 }
 
-let zTop=20;
-function apply(el){
-  const r=el._rec;
-  el.style.setProperty('--dx',(r.dx||0)+'px');
-  el.style.setProperty('--dy',(r.dy||0)+'px');
-  el.style.setProperty('--r',(r.r||0)+'deg');
-  el.style.setProperty('--s',r.s||1);
-  setFrame(el,r.frame);
-  if(r.cap!=null)el.querySelector('figcaption').textContent=r.cap;
-  if(r.src)el.querySelector('.img').style.background='center/cover no-repeat url("'+(imgCache[r.src]||r.src)+'")';
-  if(r.z){el.style.zIndex=r.z;zTop=Math.max(zTop,r.z)}
-  el.hidden=!!r.hidden;
-}
-
-function init(el,rec){
-  el._rec=rec;
-  if(rec.frame==null)rec.frame=frameOf(el);
-  if(rec.r==null)rec.r=parseFloat(el.style.getPropertyValue('--r'))||0;
-  if(!el.querySelector('figcaption'))el.append(document.createElement('figcaption'));
-  const hr=document.createElement('span');hr.className='h-rot';hr.title='drag to rotate';
-  const hs=document.createElement('span');hs.className='h-size';hs.title='drag to resize';
-  el.append(hr,hs);
-  el.classList.remove('drag');
-  apply(el);
-  wire(el);
-}
-
-// built-in photos get ids from their order on the page
-document.querySelectorAll('.main .photo').forEach((el,i)=>{
-  const id='p'+i;el.dataset.id=id;
-  const cap=el.querySelector('figcaption'),img=el.querySelector('.img');
-  el._orig={r:parseFloat(el.style.getPropertyValue('--r'))||0,frame:frameOf(el),
-    cap:cap?cap.textContent:'',bg:img.style.background};
-  state.photos[id]=state.photos[id]||{};
-  init(el,state.photos[id]);
-});
-
-function makeAdded(rec){
-  const f=document.createElement('figure');
-  f.className='photo';f.dataset.id=rec.id;
-  f.style.left=rec.left+'%';f.style.top=rec.top+'px';f.style.width=(rec.w||200)+'px';
-  f.innerHTML='<span class="img"></span><figcaption></figcaption>';
-  f.querySelector('.img').style.setProperty('--ar',rec.ar||'4/5');
-  board.append(f);init(f,rec);
-  return f;
-}
-state.added.forEach(makeAdded);
-
-/* selection */
-let sel=null;
-function select(el){
-  if(sel&&sel!==el)sel.classList.remove('sel');
-  sel=el;
-  if(el){
-    el.classList.add('sel');
-    el._rec.z=++zTop;el.style.zIndex=el._rec.z;
-    $('#frame-btn').textContent='frame: '+FRAME_NAME[el._rec.frame];
-  }
-  document.body.classList.toggle('has-sel',!!el);
-}
-
-/* edit mode */
-let editing=false;
-function setEditing(on){
-  editing=on;
-  document.body.classList.toggle('editing',on);
-  $('#edit-toggle').textContent=on?'✓ done':'✎ edit layout';
-  document.querySelectorAll('.photo figcaption').forEach(c=>c.contentEditable=on?'true':'false');
-  if(!on){select(null);save()}
-}
-$('#edit-toggle').addEventListener('click',()=>setEditing(!editing));
-
-/* drag, rotate, resize with mouse or finger */
-function wire(el){
-  let mode=null,pid=null,st={};
-  el.addEventListener('pointerdown',e=>{
-    if(!editing||(e.pointerType==='mouse'&&e.button!==0))return;
-    if(e.target.tagName==='FIGCAPTION'){select(el);return}
-    select(el);
-    mode=e.target.classList.contains('h-rot')?'rot':e.target.classList.contains('h-size')?'size':'move';
-    pid=e.pointerId;el.setPointerCapture(pid);el.classList.add('dragging');
-    const b=el.getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2;
-    const r=el._rec;
-    st={x:e.clientX,y:e.clientY,dx:r.dx||0,dy:r.dy||0,r:r.r||0,s:r.s||1,cx,cy,
-        a:Math.atan2(e.clientY-cy,e.clientX-cx),d:Math.hypot(e.clientX-cx,e.clientY-cy)||1};
-    e.preventDefault();
-  });
-  el.addEventListener('pointermove',e=>{
-    if(e.pointerId!==pid)return;
-    const r=el._rec;
-    if(mode==='move'){r.dx=Math.round(st.dx+e.clientX-st.x);r.dy=Math.round(st.dy+e.clientY-st.y)}
-    else if(mode==='rot'){
-      const a=Math.atan2(e.clientY-st.cy,e.clientX-st.cx);
-      let deg=st.r+(a-st.a)*180/Math.PI;
-      if(e.shiftKey)deg=Math.round(deg/15)*15;
-      r.r=Math.round(deg*10)/10;
-    }else if(mode==='size'){
-      const d=Math.hypot(e.clientX-st.cx,e.clientY-st.cy);
-      r.s=Math.round(Math.min(3,Math.max(.35,st.s*d/st.d))*100)/100;
-    }
-    apply(el);
-  });
-  const end=e=>{if(e.pointerId!==pid)return;pid=null;mode=null;el.classList.remove('dragging');save()};
-  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
-  el.querySelector('figcaption').addEventListener('input',e=>{el._rec.cap=e.target.textContent;save()});
-}
-
-// click empty space to deselect
-document.addEventListener('pointerdown',e=>{
-  if(!editing)return;
-  if(e.target.closest('.photo,.dock,.export'))return;
-  select(null);
-});
-
-/* toolbar actions */
+/* ---------- buttons for the selected thing ---------- */
 function act(a){
   if(!sel)return;
-  const r=sel._rec;
-  if(a==='rotl')r.r=(r.r||0)-5;
-  if(a==='rotr')r.r=(r.r||0)+5;
-  if(a==='smaller')r.s=Math.max(.35,Math.round(((r.s||1)-.1)*100)/100);
-  if(a==='bigger')r.s=Math.min(3,Math.round(((r.s||1)+.1)*100)/100);
-  if(a==='frame'){r.frame=FRAMES[(FRAMES.indexOf(r.frame)+1)%FRAMES.length];$('#frame-btn').textContent='frame: '+FRAME_NAME[r.frame]}
-  if(a==='front'){r.z=++zTop}
-  if(a==='delete'){
-    if(sel.parentElement===board){
-      state.added=state.added.filter(x=>x!==r);sel.remove();
-    }else{r.hidden=true;apply(sel)}
-    select(null);save();toast('photo removed. "reset" undoes everything since you last published');return;
+  const el=sel;
+  if(a==='rotl'||a==='rotr')setNum(el,rotVar(el),num(el,rotVar(el))+(a==='rotl'?-5:5),'deg');
+  if(a==='smaller')setNum(el,'--s',Math.max(.3,Math.round((num(el,'--s',1)-.1)*100)/100),'');
+  if(a==='bigger')setNum(el,'--s',Math.min(4,Math.round((num(el,'--s',1)+.1)*100)/100),'');
+  if(a==='frame'){
+    if(isPhoto(el)){
+      const f=FRAMES[(FRAMES.indexOf(frameOf(el))+1)%FRAMES.length];
+      setFrame(el,f);$('#frame-btn').textContent='frame: '+FRAME_NAME[f];
+    }else if(el.classList.contains('sticker')){
+      const cur=STICKER_STYLES.findIndex(s=>s&&el.classList.contains(s));
+      STICKER_STYLES.forEach(s=>s&&el.classList.remove(s));
+      const next=STICKER_STYLES[(Math.max(cur,0)+1)%STICKER_STYLES.length];
+      if(next)el.classList.add(next);
+    }
   }
-  apply(sel);save();
+  if(a==='swap'){pick('swap');return}
+  if(a==='front')el.style.zIndex=++zTop;
+  if(a==='delete'){select(null);el.remove();toast('deleted. "undo all" brings back everything since you last published')}
+  save();
 }
-document.querySelectorAll('.sel-tools [data-act]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.act)));
+$$('.sel-tools [data-act]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.act)));
 
-// keyboard: arrows move, [ ] rotate, - = resize, delete removes
+// keyboard: arrows move, [ ] turn, - = resize, delete removes
 document.addEventListener('keydown',e=>{
-  if(!editing||!sel)return;
-  if(e.target.isContentEditable||e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
-  const r=sel._rec,step=e.shiftKey?20:4;
-  const map={ArrowLeft:()=>r.dx=(r.dx||0)-step,ArrowRight:()=>r.dx=(r.dx||0)+step,ArrowUp:()=>r.dy=(r.dy||0)-step,ArrowDown:()=>r.dy=(r.dy||0)+step,
-    '[':()=>r.r=(r.r||0)-2,']':()=>r.r=(r.r||0)+2,'-':()=>r.s=Math.max(.35,(r.s||1)-.05),'=':()=>r.s=Math.min(3,(r.s||1)+.05)};
-  if(map[e.key]){e.preventDefault();map[e.key]();apply(sel);save()}
+  if(!editing||!sel||e.target.isContentEditable||/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  const el=sel,step=e.shiftKey?20:4,rv=rotVar(el);
+  const map={
+    ArrowLeft:()=>setNum(el,'--dx',num(el,'--dx')-step,'px'),ArrowRight:()=>setNum(el,'--dx',num(el,'--dx')+step,'px'),
+    ArrowUp:()=>setNum(el,'--dy',num(el,'--dy')-step,'px'),ArrowDown:()=>setNum(el,'--dy',num(el,'--dy')+step,'px'),
+    '[':()=>setNum(el,rv,num(el,rv)-2,'deg'),']':()=>setNum(el,rv,num(el,rv)+2,'deg'),
+    '-':()=>setNum(el,'--s',Math.max(.3,num(el,'--s',1)-.05),''),'=':()=>setNum(el,'--s',Math.min(4,num(el,'--s',1)+.05),''),
+  };
+  if(map[e.key]){e.preventDefault();map[e.key]();save()}
   else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();act('delete')}
   else if(e.key==='Escape')select(null);
 });
 
-/* adding your own photos */
+/* ---------- word tools ---------- */
+const dock=$('.dock');
+dock.addEventListener('mousedown',e=>{if(e.target.closest('[data-fmt]'))e.preventDefault()}); // keep the text selection
+function editableRange(){
+  const s=getSelection();
+  if(!s.rangeCount)return null;
+  const r=s.getRangeAt(0),n=r.commonAncestorContainer,el=n.nodeType===1?n:n.parentElement;
+  return el&&el.isContentEditable&&shell.contains(el)?{r,el}:null;
+}
+function toggleWrap(tag,cls){
+  const x=editableRange();
+  if(!x){toast('click into some words first');return}
+  const on=x.el.closest(cls?tag+'.'+cls:tag);
+  if(on&&on.isContentEditable){on.replaceWith(...on.childNodes);return}
+  if(x.r.collapsed){toast('select some words first');return}
+  const w=document.createElement(tag);if(cls)w.className=cls;
+  w.append(x.r.extractContents());x.r.insertNode(w);
+  getSelection().selectAllChildren(w);
+}
+function fmt(f){
+  const x=editableRange();
+  if(!x){toast('click into some words first');return}
+  if(f==='bold'||f==='italic')document.execCommand(f);
+  if(f==='hi')toggleWrap('mark');
+  if(f==='pink')toggleWrap('span','pink');
+  if(f==='quote'){
+    const blk=x.el.closest('.text p,.text blockquote');
+    if(!blk){toast('big quotes go inside a post');return}
+    const to=document.createElement(blk.tagName==='P'?'blockquote':'p');
+    if(to.tagName==='BLOCKQUOTE')to.className='pull';
+    to.append(...blk.childNodes);blk.replaceWith(to);
+  }
+  if(f==='link'){
+    const on=x.el.closest('a');
+    if(on){on.replaceWith(...on.childNodes)}
+    else{
+      if(x.r.collapsed){toast('select the words to link first');return}
+      let url=prompt('link to (paste a web address):');
+      if(!url)return;
+      if(!/^(https?:|mailto:|#)/.test(url))url='https://'+url;
+      document.execCommand('createLink',false,url);
+    }
+  }
+  save();
+}
+$$('[data-fmt]').forEach(b=>b.addEventListener('click',()=>fmt(b.dataset.fmt)));
+
+/* ---------- adding photos, text, posts, photo pages ---------- */
+const bgFor=src=>'center/cover no-repeat url("'+src+'")';
 function readImg(file){
   return new Promise((res,rej)=>{
     const u=URL.createObjectURL(file),im=new Image();
     im.onload=()=>{
-      const w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,900/Math.max(w,h));
+      const w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,1100/Math.max(w,h));
       const c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
       c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-      URL.revokeObjectURL(u);res({src:c.toDataURL('image/jpeg',.82),ar:w+'/'+h});
+      URL.revokeObjectURL(u);res({src:c.toDataURL('image/jpeg',.84),ar:w+'/'+h});
     };
     im.onerror=()=>{URL.revokeObjectURL(u);rej()};
     im.src=u;
   });
 }
-$('#add-input').addEventListener('change',async e=>{
-  const files=[...e.target.files];e.target.value='';
+function newPhoto(src,ar){
+  const f=document.createElement('figure');
+  f.className='photo';f.style.setProperty('--r',Math.round(Math.random()*14-7)+'deg');
+  f.innerHTML='<span class="img"></span><figcaption></figcaption>';
+  const im=f.querySelector('.img');im.style.setProperty('--ar',ar);im.style.background=bgFor(src);
+  return f;
+}
+// a spot near the middle of the screen, in the coordinates of the given box
+function spotIn(box,w=200){
+  const b=box.getBoundingClientRect();
+  return{left:Math.round(Math.max(2,Math.min(70,(innerWidth/2-b.left-w/2+Math.random()*120-60)/b.width*100))),
+    top:Math.round(Math.max(20,innerHeight*.3-b.top+Math.random()*60))};
+}
+function place(f,target){
+  if(target.classList&&target.classList.contains('post')){
+    const g=$$('.gutter',target).sort((a,b)=>a.children.length-b.children.length)[0];
+    g.append(f);
+  }else if(target.classList&&target.classList.contains('spread')){
+    f.style.cssText+=';width:180px;left:'+Math.round(5+Math.random()*60)+'%;top:'+Math.round(20+Math.random()*120)+'px';
+    target.append(f);
+  }else{
+    const p=spotIn($('.main'));
+    f.style.cssText+=';width:200px;left:'+p.left+'%;top:'+p.top+'px';
+    $('#board').append(f);
+  }
+  prep(f);
+}
+let pickTarget=null;
+function pick(t){pickTarget=t;picInput.multiple=!(t==='swap'||t==='avatar');picInput.click()}
+picInput.addEventListener('change',async e=>{
+  const files=[...e.target.files],t=pickTarget;e.target.value='';
   if(!files.length)return;
-  if(!editing)setEditing(true);
-  const main=$('.main').getBoundingClientRect();
-  const baseTop=Math.max(20,innerHeight*.25-main.top);
   let last=null;
-  for(const [i,f] of files.entries()){
+  for(const file of files){
     try{
-      const {src,ar}=await readImg(f);
-      const rec={id:'a'+Date.now()+i,left:Math.round(25+Math.random()*40),top:Math.round(baseTop+i*36),
-        w:200,ar,src,cap:'',frame:'tape',r:Math.round(Math.random()*16-8),s:1};
-      state.added.push(rec);last=makeAdded(rec);
-    }catch(err){toast("couldn't open "+f.name+", try a jpg or png")}
+      const {src,ar}=await readImg(file);
+      if(t==='avatar'){$('.avatar .img').style.background=bgFor(src);break}
+      if(t==='swap'){if(sel)sel.querySelector('.img').style.background=bgFor(src);break}
+      const f=newPhoto(src,ar);place(f,t||'board');last=f;
+    }catch(err){toast("couldn't open "+file.name+", try a jpg or png")}
   }
   if(last)select(last);
   save();
 });
-$('#replace-input').addEventListener('change',async e=>{
-  const f=e.target.files[0];e.target.value='';
-  if(!f||!sel)return;
-  try{const {src}=await readImg(f);sel._rec.src=src;apply(sel);save()}
-  catch(err){toast("couldn't open that file, try a jpg or png")}
+
+const LIKE='<button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>';
+// put new sections after the one you're looking at
+function insertSection(sec){
+  const feed=$('.feed'),mid=innerHeight/2;
+  const here=[...feed.children].find(s=>{const b=s.getBoundingClientRect();return b.top<=mid&&b.bottom>=mid});
+  if(here)here.after(sec);else feed.prepend(sec);
+  prep(sec);
+  sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function selectText(el){el.focus();getSelection().selectAllChildren(el)}
+function add(kind){
+  if(kind==='photo')return pick(null);
+  if(kind==='text'){
+    const s=document.createElement('div');s.className='sticker';s.textContent='write something';
+    const p=spotIn($('.main'),160);s.style.left=p.left+'%';s.style.top=p.top+'px';s.style.setProperty('--r2',Math.round(Math.random()*8-4)+'deg');
+    $('#board').append(s);prep(s);select(s);selectText(s);save();return;
+  }
+  if(kind==='post'){
+    const a=document.createElement('article');a.className='post';
+    const d=new Date().toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toLowerCase();
+    a.innerHTML='<div class="gutter left"></div><div class="text"><div class="meta"><span class="cat">notes</span><span>'+d+'</span><span>· 1 min read</span></div>'
+      +'<h3>new post title</h3><p>start writing here…</p>'
+      +'<div class="post-foot"><div class="t"><a href="#">#notes to self</a></div><div class="acts"><span class="notes">0 notes</span>'+LIKE+'</div></div></div><div class="gutter right"></div>';
+    insertSection(a);setTimeout(()=>selectText(a.querySelector('h3')),350);save();return;
+  }
+  if(kind==='spread'){
+    const s=document.createElement('section');s.className='spread';s.setAttribute('aria-label','Photo spread');
+    s.innerHTML='<div class="scrawl">photo dump, no context</div>';
+    insertSection(s);save();toast('use "+ photo here" on the page to fill it');
+  }
+}
+$$('[data-add]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.add)));
+
+/* ---------- tools on each post and photo page ---------- */
+function addSectionTools(sec){
+  if(sec.querySelector(':scope>.post-tools'))return;
+  const t=document.createElement('div');t.className='post-tools';t.contentEditable='false';
+  const what=sec.classList.contains('spread')?'page':'post';
+  t.innerHTML='<button type="button" data-sec="up" aria-label="Move up">↑</button><button type="button" data-sec="down" aria-label="Move down">↓</button>'
+    +'<button type="button" data-sec="pic">+ photo here</button><button type="button" data-sec="del">delete '+what+'</button>';
+  sec.prepend(t);
+}
+shell.addEventListener('click',e=>{
+  const b=e.target.closest('.post-tools button');
+  if(!b||!editing)return;
+  const sec=b.closest('.post,.spread'),a=b.dataset.sec;
+  if(a==='up'&&sec.previousElementSibling)sec.previousElementSibling.before(sec);
+  if(a==='down'&&sec.nextElementSibling)sec.nextElementSibling.after(sec);
+  if(a==='pic')return pick(sec);
+  if(a==='del'){
+    if(!b.classList.contains('warn')){
+      b.classList.add('warn');b.textContent='sure? click again';
+      setTimeout(()=>{b.classList.remove('warn');b.textContent='delete '+(sec.classList.contains('spread')?'page':'post')},3000);
+      return;
+    }
+    if(sel&&sec.contains(sel))select(null);
+    sec.remove();toast('deleted. "undo all" brings back everything since you last published');
+  }
+  if(a==='up'||a==='down')b.focus();
+  save();
 });
 
-/* publish to github: one commit with layout.json plus any new photos in images/ */
-async function gh(path,opt={},token=getToken()){
-  const r=await fetch('https://api.github.com/repos/'+REPO+path,{...opt,headers:{
-    Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
-  if(!r.ok){const e=new Error('github '+r.status);e.status=r.status;throw e}
-  return r.json();
+/* ---------- publish: one commit with the page, plus any new photos in images/ ---------- */
+async function gh(path,{method='GET',body,raw}={},token=store.get(TOKEN_KEY)){
+  const r=await fetch(API+path,{method,body:body&&JSON.stringify(body),headers:{
+    Authorization:'Bearer '+token,'Content-Type':'application/json',
+    Accept:raw?'application/vnd.github.raw+json':'application/vnd.github+json'}});
+  if(!r.ok)throw Object.assign(new Error('github '+r.status),{status:r.status});
+  return raw?r.text():r.json();
 }
 async function imgPath(dataUrl){
   const buf=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(dataUrl));
   return 'images/'+[...new Uint8Array(buf)].slice(0,8).map(b=>b.toString(16).padStart(2,'0')).join('')+'.jpg';
 }
-const allRecs=s=>[...Object.values(s.photos),...s.added];
-
-const pubBtn=$('#publish-btn'),connectBox=$('#connect');
 let publishing=false;
 async function publish(){
   if(publishing)return;
-  if(!getToken()){connectBox.hidden=false;$('#token-input').focus();return}
+  if(!store.get(TOKEN_KEY)){connectBox.hidden=false;$('#token-input').focus();return}
   publishing=true;pubBtn.textContent='publishing…';
   try{
-    clearTimeout(saveT);
-    const out=JSON.parse(JSON.stringify(state)),files=new Map();
-    for(const r of allRecs(out)){
-      if(r.src&&r.src.startsWith('data:')){
-        const p=await imgPath(r.src);
-        files.set(p,r.src.split(',')[1]);imgCache[p]=r.src;r.src=p;
-      }
-    }
-    out.savedAt=Date.now();
     const ref=await gh('/git/ref/heads/'+BRANCH);
     const head=await gh('/git/commits/'+ref.object.sha);
-    const tree=[];
-    for(const [path,b64] of files){
-      const blob=await gh('/git/blobs',{method:'POST',body:JSON.stringify({content:b64,encoding:'base64'})});
-      tree.push({path,mode:'100644',type:'blob',sha:blob.sha});
+    const [src,tree]=await Promise.all([
+      gh('/contents/index.html?ref='+ref.object.sha,{raw:true}),
+      gh('/git/trees/'+head.tree.sha+'?recursive=1'),
+    ]);
+    const have=new Set(tree.tree.map(t=>t.path)),entries=[];
+    // keep the page's code and styles from github, swap in what you see now
+    const doc=new DOMParser().parseFromString(src,'text/html');
+    const page=clean(shell.cloneNode(true));
+    for(const el of within('[style*="data:image"]',page)){
+      let style=el.getAttribute('style'),m;
+      while((m=style.match(/data:image\/[^")']+/))){
+        const path=await imgPath(m[0]);
+        if(!have.has(path)){
+          const blob=await gh('/git/blobs',{method:'POST',body:{content:m[0].split(',')[1],encoding:'base64'}});
+          entries.push({path,mode:'100644',type:'blob',sha:blob.sha});have.add(path);
+        }
+        style=style.split(m[0]).join(path);
+      }
+      el.setAttribute('style',style);
     }
-    tree.push({path:'layout.json',mode:'100644',type:'blob',content:JSON.stringify(out,null,1)});
-    const t=await gh('/git/trees',{method:'POST',body:JSON.stringify({base_tree:head.tree.sha,tree})});
-    const c=await gh('/git/commits',{method:'POST',body:JSON.stringify({message:'Update layout',tree:t.sha,parents:[ref.object.sha]})});
-    await gh('/git/refs/heads/'+BRANCH,{method:'PATCH',body:JSON.stringify({sha:c.sha})});
-    // keep editing the published version; photos show from memory until github has them online
-    for(const r of allRecs(state))if(r.src&&r.src.startsWith('data:'))r.src=await imgPath(r.src);
-    state.savedAt=out.savedAt;
-    try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
-    toast('published! live for everyone in about a minute');
+    doc.querySelector('.shell').replaceWith(doc.importNode(page,true));
+    const at=Date.now();
+    let meta=doc.querySelector('meta[name="published-at"]');
+    if(!meta){meta=doc.createElement('meta');meta.name='published-at';doc.head.append(meta)}
+    meta.content=at;
+    entries.push({path:'index.html',mode:'100644',type:'blob',content:'<!doctype html>\n'+doc.documentElement.outerHTML+'\n'});
+    if(have.has('layout.json'))entries.push({path:'layout.json',mode:'100644',type:'blob',sha:null});
+    const t=await gh('/git/trees',{method:'POST',body:{base_tree:head.tree.sha,tree:entries}});
+    const c=await gh('/git/commits',{method:'POST',body:{message:'Update the zine',tree:t.sha,parents:[ref.object.sha]}});
+    await gh('/git/refs/heads/'+BRANCH,{method:'PATCH',body:{sha:c.sha}});
+    let live=$('meta[name="published-at"]');
+    if(!live){live=document.createElement('meta');live.name='published-at';document.head.append(live)}
+    live.content=at;
+    saveNow(at);
+    toast('published! readers see it within a few minutes');
   }catch(e){
     if(e.status===401||e.status===403||e.status===404){
-      try{localStorage.removeItem(TOKEN_KEY)}catch(err){}
-      connectBox.hidden=false;
+      store.del(TOKEN_KEY);connectBox.hidden=false;
       toast("github didn't accept your key. make a new one and connect again");
     }else toast("couldn't publish. check your internet and try again");
   }finally{publishing=false;pubBtn.textContent='publish'}
@@ -862,29 +1057,33 @@ $('#token-save').addEventListener('click',async()=>{
   try{
     const repo=await gh('',{},t);
     if(!repo.permissions||!repo.permissions.push)throw Object.assign(new Error(),{status:403});
-    localStorage.setItem(TOKEN_KEY,t);
+    store.set(TOKEN_KEY,t);
     $('#token-input').value='';connectBox.hidden=true;
     toast('connected! publishing now');
     publish();
   }catch(e){
-    toast(e.status?"that key can't change paper-cuts-zine. check step 3 and 4":"couldn't reach github. check your internet");
+    toast(e.status?"that key can't change paper-cuts-zine. check steps 3 and 4":"couldn't reach github. check your internet");
   }
 });
 $('#token-forget').addEventListener('click',()=>{
-  try{localStorage.removeItem(TOKEN_KEY)}catch(e){}
+  store.del(TOKEN_KEY);
   toast('this device is disconnected. editing goes away when you leave the page');
 });
+
+// undo all: drop this device's unpublished changes and show the published page
 let resetArmed=false,resetT;
 $('#reset-btn').addEventListener('click',e=>{
   const b=e.currentTarget;
-  if(!resetArmed){resetArmed=true;b.textContent='sure? click again';b.classList.add('warn');
-    resetT=setTimeout(()=>{resetArmed=false;b.textContent='reset';b.classList.remove('warn')},3000);return}
-  clearTimeout(resetT);resetArmed=false;b.textContent='reset';b.classList.remove('warn');
-  // drop this browser's draft and go back to the published layout
-  clearTimeout(saveT);
-  try{localStorage.removeItem(KEY)}catch(err){}
+  if(!resetArmed){
+    resetArmed=true;b.textContent='sure? click again';b.classList.add('warn');
+    resetT=setTimeout(()=>{resetArmed=false;b.textContent='undo all';b.classList.remove('warn')},3000);
+    return;
+  }
+  clearTimeout(resetT);clearTimeout(saveT);resetting=true;
+  store.del(DRAFT_KEY);
   location.reload();
 });
+}
 </script>
 
 </body></html>
