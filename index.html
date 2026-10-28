@@ -526,14 +526,6 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--
       <p class="label"><span class="en">tags</span><span class="sq" lang="sq">etiketa</span></p>
       <div class="tags"><span class="en"><a href="#">#criticism</a> <a href="#">#clothes</a> <a href="#">#film</a> <a href="#">#rooms</a> <a href="#">#manners</a> <a href="#">#notes</a></span><span class="sq" lang="sq"><a href="#">#kritikë</a> <a href="#">#rroba</a> <a href="#">#film</a> <a href="#">#hapësira</a> <a href="#">#sjellje</a> <a href="#">#shënime</a></span></div>
     </div>
-    <div class="block now-block">
-      <p class="label"><span class="en">currently</span><span class="sq" lang="sq">tani për tani</span></p>
-      <ul class="now">
-        <li class="en">watching: Twin Peaks, season two</li><li class="sq" lang="sq">po shikoj: Twin Peaks, sezoni i dytë</li>
-        <li class="en">reading: The Fran Lebowitz Reader</li><li class="sq" lang="sq">po lexoj: The Fran Lebowitz Reader</li>
-        <li class="en">wearing: whatever the trend report said not to</li><li class="sq" lang="sq">po vesh: pikërisht atë që raporti i trendeve tha të mos e vesh</li>
-      </ul>
-    </div>
   </aside>
 
   <main class="main">
@@ -541,11 +533,9 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--
     <header class="hero">
       <div class="lang" aria-label="Language"><button type="button" data-lang="en">English</button><span aria-hidden="true">·</span><button type="button" data-lang="sq" lang="sq">Shqip</button></div>
       <div class="title masthead" data-set="masthead">
-        <div class="kicker"><span class="en">n° 01 · autumn 2026</span><span class="sq" lang="sq">nr. 01 · vjeshtë 2026</span></div>
         <h1 class="ransom" aria-label="Eli Vula">
           <span class="r8">E</span><span class="r6">l</span><span class="r3">i</span><span class="gap"></span><span class="r1">V</span><span class="r2">u</span><span class="r7">l</span><span class="r6 tilt">a</span>
         </h1>
-        <p class="tagline"><span class="en">criticism of clothes, films, rooms, and the people inside them</span><span class="sq" lang="sq">kritikë për rrobat, filmat, dhomat dhe njerëzit brenda tyre</span></p>
         <div class="intro" id="about">
           <div class="en"><p>I write criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
           <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
@@ -555,7 +545,6 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--
           <p>Shkruar për këdo, kudo, që ka qëndruar ndonjëherë në një dhomë dhe e ka korrigjuar në heshtje.</p></div>
         </div>
       </div>
-      <span class="star" data-set="masthead" style="left:23%;top:112px;width:40px;height:40px;transform:rotate(-14deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"></path></svg></span>
       <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
@@ -739,7 +728,7 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1','lang-top-v1','post-angels-v1','post-angels-v2'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1','lang-top-v1','post-angels-v1','post-angels-v2','mysterious-v1'];
 const pubLang=$('.hero .lang')?.cloneNode(true);
 const pubIntro=$('.masthead .intro')?.cloneNode(true);
 const BILINGUAL=['.bio','.side nav','.side .lang','.side .block:not(.now-block)','.side .now-block','.masthead .kicker','.masthead .tagline','.end p','#about'];
@@ -789,6 +778,8 @@ try{
       const top=$('.hero');
       if(top&&pubLang&&!top.querySelector('.lang'))top.prepend(pubLang);
     }
+    // mysterious-v1: no star, issue line, tagline or "currently" list
+    if(!(d.fixes||[]).includes('mysterious-v1'))$$('.hero .star,.masthead .kicker,.masthead .tagline,.side .now-block').forEach(e=>e.remove());
   }
 }catch(e){}
 // posts Claude wrote wait at the top of your essays (only for you) until you publish them
