@@ -314,6 +314,13 @@ a{color:inherit}
 .export textarea{width:100%;height:120px;font:12px/1.4 var(--f-body);background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
 .export .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
 .export button{font:inherit;background:var(--ink);color:var(--paper);border:0;padding:4px 10px;cursor:pointer}
+.export p{margin:0 0 6px}
+.export ol{margin:6px 0 10px;padding-left:20px}
+.export a{color:var(--blue)}
+.export input{flex:1;min-width:0;font:inherit;padding:4px 6px;border:1.5px solid var(--ink);background:#fff;color:var(--ink)}
+.export .fine{margin:8px 0 0;color:var(--ink-soft)}
+.export button.link{background:none;color:var(--blue);padding:0;text-decoration:underline}
+.export{max-height:calc(100vh - 120px);overflow:auto}
 
 @media (max-width:900px){
   body:not(.editing) .gutter .photo{--dx:0px!important;--dy:0px!important}
@@ -530,17 +537,26 @@ a{color:inherit}
       <button type="button" data-act="delete">delete</button>
     </div>
     <span class="sep"></span>
-    <button type="button" id="export-btn">export</button>
+    <button type="button" id="publish-btn" class="primary">publish</button>
     <button type="button" id="reset-btn">reset</button>
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
-<div class="export" id="export" hidden>
-  <div class="row"><span>your layout (send this to me and I'll bake it into the real site)</span><button type="button" id="export-close">close</button></div>
-  <textarea id="export-text" readonly aria-label="Layout data"></textarea>
+<div class="export" id="connect" hidden>
+  <div class="row"><b>connect your github (one time only)</b><button type="button" id="connect-close">close</button></div>
+  <p>only the owner of this zine can publish. everyone else can still play, but their changes stay on their own screen.</p>
+  <ol>
+    <li>open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+    <li>name it <b>paper cuts</b>, and set expiration to whatever you like</li>
+    <li>repository access: <b>only select repositories</b> → <b>paper-cuts-zine</b></li>
+    <li>permissions → repository → <b>contents</b> → <b>read and write</b></li>
+    <li>click <b>generate token</b>, copy it, paste it below</li>
+  </ol>
+  <div class="row"><input id="token-input" type="password" placeholder="paste your key here" autocomplete="off" aria-label="GitHub key"><button type="button" id="token-save">connect</button></div>
+  <p class="fine">the key stays in this browser only. <button type="button" id="token-forget" class="link">disconnect this device</button></p>
 </div>
 
-<script>
+<script type="module">
 // like buttons
 document.querySelectorAll('.like').forEach(b=>{
   b.addEventListener('click',()=>{
@@ -554,8 +570,14 @@ document.querySelectorAll('.like').forEach(b=>{
 
 /* ================= layout editor ================= */
 const KEY='papercuts-layout-v1';
-let state={photos:{},added:[]};
-try{const s=localStorage.getItem(KEY);if(s){const p=JSON.parse(s);if(p&&p.photos&&p.added)state=p}}catch(e){}
+// the published layout (layout.json) is what everyone sees; a newer unpublished draft in this browser wins over it
+const valid=p=>p&&p.photos&&p.added;
+const imgCache={}; // published image path -> photo still in memory, until github serves the file
+let state={photos:{},added:[]},local=null,pub=null;
+try{local=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+try{const r=await fetch('layout.json?t='+Date.now(),{cache:'no-store'});if(r.ok)pub=await r.json()}catch(e){}
+if(valid(local)&&(!valid(pub)||(local.savedAt||0)>=(pub.savedAt||0)))state=local;
+else if(valid(pub))state=pub;
 
 const $=s=>document.querySelector(s);
 const board=$('#board'),toastEl=$('#toast');
@@ -565,6 +587,7 @@ let saveT;
 function save(){
   clearTimeout(saveT);
   saveT=setTimeout(()=>{
+    state.savedAt=Date.now();
     try{localStorage.setItem(KEY,JSON.stringify(state))}
     catch(e){toast("couldn't save, browser storage is full or blocked. changes stay until you reload")}
   },150);
@@ -596,7 +619,7 @@ function apply(el){
   el.style.setProperty('--s',r.s||1);
   setFrame(el,r.frame);
   if(r.cap!=null)el.querySelector('figcaption').textContent=r.cap;
-  if(r.src)el.querySelector('.img').style.background='center/cover no-repeat url("'+r.src+'")';
+  if(r.src)el.querySelector('.img').style.background='center/cover no-repeat url("'+(imgCache[r.src]||r.src)+'")';
   if(r.z){el.style.zIndex=r.z;zTop=Math.max(zTop,r.z)}
   el.hidden=!!r.hidden;
 }
@@ -715,7 +738,7 @@ function act(a){
     if(sel.parentElement===board){
       state.added=state.added.filter(x=>x!==r);sel.remove();
     }else{r.hidden=true;apply(sel)}
-    select(null);save();toast('photo removed. "reset" brings the original ones back');return;
+    select(null);save();toast('photo removed. "reset" undoes everything since you last published');return;
   }
   apply(sel);save();
 }
@@ -772,32 +795,91 @@ $('#replace-input').addEventListener('change',async e=>{
   catch(err){toast("couldn't open that file, try a jpg or png")}
 });
 
-/* export + reset */
-$('#export-btn').addEventListener('click',()=>{
-  const box=$('#export'),ta=$('#export-text');
-  ta.value=JSON.stringify(state);box.hidden=false;ta.focus();ta.select();
-  if(navigator.clipboard)navigator.clipboard.writeText(ta.value).then(()=>toast('layout copied'),()=>{});
+/* publish to github: one commit with layout.json plus any new photos in images/ */
+const REPO='elivula/paper-cuts-zine',BRANCH='main',TOKEN_KEY='papercuts-gh-token';
+const getToken=()=>{try{return localStorage.getItem(TOKEN_KEY)}catch(e){return null}};
+async function gh(path,opt={},token=getToken()){
+  const r=await fetch('https://api.github.com/repos/'+REPO+path,{...opt,headers:{
+    Authorization:'Bearer '+token,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
+  if(!r.ok){const e=new Error('github '+r.status);e.status=r.status;throw e}
+  return r.json();
+}
+async function imgPath(dataUrl){
+  const buf=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(dataUrl));
+  return 'images/'+[...new Uint8Array(buf)].slice(0,8).map(b=>b.toString(16).padStart(2,'0')).join('')+'.jpg';
+}
+const allRecs=s=>[...Object.values(s.photos),...s.added];
+
+const pubBtn=$('#publish-btn'),connectBox=$('#connect');
+let publishing=false;
+async function publish(){
+  if(publishing)return;
+  if(!getToken()){connectBox.hidden=false;$('#token-input').focus();return}
+  publishing=true;pubBtn.textContent='publishing…';
+  try{
+    clearTimeout(saveT);
+    const out=JSON.parse(JSON.stringify(state)),files=new Map();
+    for(const r of allRecs(out)){
+      if(r.src&&r.src.startsWith('data:')){
+        const p=await imgPath(r.src);
+        files.set(p,r.src.split(',')[1]);imgCache[p]=r.src;r.src=p;
+      }
+    }
+    out.savedAt=Date.now();
+    const ref=await gh('/git/ref/heads/'+BRANCH);
+    const head=await gh('/git/commits/'+ref.object.sha);
+    const tree=[];
+    for(const [path,b64] of files){
+      const blob=await gh('/git/blobs',{method:'POST',body:JSON.stringify({content:b64,encoding:'base64'})});
+      tree.push({path,mode:'100644',type:'blob',sha:blob.sha});
+    }
+    tree.push({path:'layout.json',mode:'100644',type:'blob',content:JSON.stringify(out,null,1)});
+    const t=await gh('/git/trees',{method:'POST',body:JSON.stringify({base_tree:head.tree.sha,tree})});
+    const c=await gh('/git/commits',{method:'POST',body:JSON.stringify({message:'Update layout',tree:t.sha,parents:[ref.object.sha]})});
+    await gh('/git/refs/heads/'+BRANCH,{method:'PATCH',body:JSON.stringify({sha:c.sha})});
+    // keep editing the published version; photos show from memory until github has them online
+    for(const r of allRecs(state))if(r.src&&r.src.startsWith('data:'))r.src=await imgPath(r.src);
+    state.savedAt=out.savedAt;
+    try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+    toast('published! live for everyone in about a minute');
+  }catch(e){
+    if(e.status===401||e.status===403||e.status===404){
+      try{localStorage.removeItem(TOKEN_KEY)}catch(err){}
+      connectBox.hidden=false;
+      toast("github didn't accept your key. make a new one and connect again");
+    }else toast("couldn't publish. check your internet and try again");
+  }finally{publishing=false;pubBtn.textContent='publish'}
+}
+pubBtn.addEventListener('click',publish);
+$('#connect-close').addEventListener('click',()=>connectBox.hidden=true);
+$('#token-save').addEventListener('click',async()=>{
+  const t=$('#token-input').value.trim();
+  if(!t){toast('paste your key first');return}
+  try{
+    const repo=await gh('',{},t);
+    if(!repo.permissions||!repo.permissions.push)throw Object.assign(new Error(),{status:403});
+    localStorage.setItem(TOKEN_KEY,t);
+    $('#token-input').value='';connectBox.hidden=true;
+    toast('connected! publishing now');
+    publish();
+  }catch(e){
+    toast(e.status?"that key can't change paper-cuts-zine. check step 3 and 4":"couldn't reach github. check your internet");
+  }
 });
-$('#export-close').addEventListener('click',()=>$('#export').hidden=true);
+$('#token-forget').addEventListener('click',()=>{
+  try{localStorage.removeItem(TOKEN_KEY)}catch(e){}
+  toast('this device is disconnected');
+});
 let resetArmed=false,resetT;
 $('#reset-btn').addEventListener('click',e=>{
   const b=e.currentTarget;
   if(!resetArmed){resetArmed=true;b.textContent='sure? click again';b.classList.add('warn');
     resetT=setTimeout(()=>{resetArmed=false;b.textContent='reset';b.classList.remove('warn')},3000);return}
   clearTimeout(resetT);resetArmed=false;b.textContent='reset';b.classList.remove('warn');
+  // drop this browser's draft and go back to the published layout
+  clearTimeout(saveT);
   try{localStorage.removeItem(KEY)}catch(err){}
-  select(null);
-  board.innerHTML='';
-  state={photos:{},added:[]};
-  document.querySelectorAll('.main .photo').forEach(el=>{
-    const o=el._orig;
-    el._rec=state.photos[el.dataset.id]={r:o.r,frame:o.frame};
-    el.querySelector('figcaption').textContent=o.cap;
-    el.querySelector('.img').style.background=o.bg;
-    el.style.zIndex='';
-    apply(el);
-  });
-  toast('back to the original layout');
+  location.reload();
 });
 </script>
 
