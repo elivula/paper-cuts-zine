@@ -433,6 +433,22 @@ body::after{opacity:.1}
 .end p{font-size:11px;text-transform:uppercase;letter-spacing:.14em}
 .post-foot{font-size:12px;border-top-width:1px}
 @media (max-width:900px){.side{border-bottom:1px solid var(--ink)}}
+
+/* ---------- masthead: classy type, cut-out letters ---------- */
+.title.masthead{transform:translate(-50%,-50%);width:min(94%,780px)}
+.masthead .kicker{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 26px;
+  font-family:var(--f-label);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink)}
+.masthead .kicker::before,.masthead .kicker::after{content:"";flex:0 1 80px;height:1px;background:var(--ink)}
+.masthead .ransom{gap:6px;align-items:center}
+.masthead .ransom span{font-size:clamp(50px,8.4vw,108px);line-height:.95;padding:8px 13px 10px;box-shadow:3px 4px 0 rgba(0,0,0,.18)}
+.masthead .ransom .gap{width:clamp(16px,3vw,38px);padding:0;box-shadow:none}
+.masthead .tagline{margin:26px 0 0;font-family:var(--f-body);font-style:italic;font-size:clamp(17px,1.7vw,22px);color:var(--ink-soft)}
+.r6{font-family:"Times New Roman",Times,serif;font-style:italic;background:#fff;border:1px solid var(--ink);transform:rotate(-3deg)}
+.r6.tilt{transform:rotate(4deg)}
+.r7{font-family:"Playfair Display","Times New Roman",serif;font-weight:700;background:var(--paper-2);color:var(--pink);transform:rotate(3deg)}
+.r8{font-family:"Playfair Display","Times New Roman",serif;font-weight:700;background:var(--blue);color:#fff;transform:rotate(-4deg)}
+.note.hello{font-size:30px;color:var(--pink);transform:rotate(7deg)}
+@media (max-width:560px){.note.hello{top:10%!important;right:6%!important;font-size:24px}}
 </style>
 
 <div class="shell">
@@ -440,12 +456,12 @@ body::after{opacity:.1}
   <aside class="side" aria-label="About this zine">
     <figure class="avatar"><span class="img s-pinkroom" style="--ar:1/1;height:100%"></span></figure>
     <div class="who">
-      <h2><br></h2>
-      <div class="url">elivula.com</div>
+      <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
+      <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
     </div>
     <p class="bio"><br></p>
     <nav aria-label="Site">
-      <a href="#">archive</a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
+      <a href="#"><br></a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
     </nav>
     <div class="block">
       <p class="label">tags</p>
@@ -463,18 +479,15 @@ body::after{opacity:.1}
   <main class="main">
     <!-- hero collage -->
     <header class="hero">
-      
-      
-      
-      
-      
-      
-
-      
-
-      
-      
-      
+      <div class="title masthead" data-set="masthead">
+        <div class="kicker">n° 01 · prishtina · autumn 2026</div>
+        <h1 class="ransom" aria-label="Eli Vula">
+          <span class="r8">E</span><span class="r6">l</span><span class="r3">i</span><span class="gap"></span><span class="r1">V</span><span class="r2">u</span><span class="r7">l</span><span class="r6 tilt">a</span>
+        </h1>
+        <p class="tagline">essays, notes &amp; photographs i didn’t delete</p>
+      </div>
+      <div class="note hello" data-set="masthead" style="right:9%;top:21%">hi, it’s me ♡</div>
+      <span class="star" data-set="masthead" style="left:19%;top:64%;width:44px;height:44px;transform:rotate(-14deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"></path></svg></span>
       <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
@@ -493,8 +506,8 @@ body::after{opacity:.1}
     </div>
 
     <footer class="end">
-      <div class="ransom" aria-label="Eli Vula">
-        <span class="r1">E</span><span class="r2" style="font-family:&quot;Times New Roman&quot;,Times,serif">l</span><span class="r3">i</span><span class="gap"></span><span class="r4" style="font-family:&quot;Times New Roman&quot;,Times,serif">V</span><span class="r5">u</span><span class="r1">l</span><span class="r2" style="font-family:&quot;Times New Roman&quot;,Times,serif">a</span>
+      <div class="ransom" aria-label="fin">
+        <span class="r6">f</span><span class="r8">i</span><span class="r3">n.</span>
       </div>
       <p><br></p>
     </footer>
@@ -605,14 +618,21 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula'];
+const FIXES=['title-eli-vula','masthead-v1'];
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
+const pubSet=$$('[data-set="masthead"]').map(e=>e.cloneNode(true)),pubEnd=$('.end .ransom')?.cloneNode(true);
 try{
   const d=JSON.parse(store.get(DRAFT_KEY));
   if(d&&d.html&&d.savedAt>=publishedAt()){
     shell.innerHTML=d.html;
     const t=$('.hero .title .ransom');
     if(!(d.fixes||[]).includes('title-eli-vula')&&t&&pubTitle)t.replaceWith(pubTitle);
+    const hero=$('.hero'),end=$('.end .ransom');
+    if(!(d.fixes||[]).includes('masthead-v1')&&hero&&!hero.querySelector('.masthead')){
+      $$('.title',hero).forEach(e=>e.remove());
+      pubSet.forEach(e=>hero.insertBefore(e,hero.querySelector('.hint')));
+      if(end&&pubEnd)end.replaceWith(pubEnd);
+    }
   }
 }catch(e){}
 
@@ -620,7 +640,7 @@ let toastT;
 function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,3200)}
 
 const MOVABLE='.photo,.note,.stamp,.scrawl,.star,.title,.sticker,.cutword,.ransom>span:not(.gap)';
-const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom>span:not(.gap),.issue,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
+const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom>span:not(.gap),.issue,.kicker,.tagline,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
 const ISLANDS='.text .post-foot,.text .photo';
 const ISLAND_TEXT='.post-foot .t';
 const within=(sel,root)=>[...(root.matches&&root.matches(sel)?[root]:[]),...$$(sel,root)];
