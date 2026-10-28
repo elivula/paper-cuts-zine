@@ -1,6 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Paper Cuts Zine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="published-at" content="1793183765626">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=Permanent+Marker&family=Pacifico&family=VT323&family=UnifrakturMaguntia&display=swap">
 <style>
@@ -409,6 +410,29 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
   .blink{animation:none}
   *{transition:none!important}
 }
+
+/* ---------- the monocle layer: calm editorial type, the quirky bits stay ---------- */
+:root{--paper:#f4f1ea;--paper-2:#ece8de;--f-body:"Times New Roman",Times,serif;--f-label:"Helvetica Neue",Helvetica,Arial,sans-serif;--f-head:"Playfair Display","Times New Roman",serif}
+body{font-size:18px;line-height:1.6}
+body::after{opacity:.1}
+.side{border-right:1px solid var(--ink)}
+.side h2{font-family:var(--f-body);font-style:italic;font-weight:700;font-size:28px;letter-spacing:-.01em}
+.side .url,.label,.side nav a,.meta,.issue,.end p,.post-foot{font-family:var(--f-label)}
+.side .url{font-size:12px;letter-spacing:.06em}
+.bio{font-size:16px;line-height:1.5}
+.now{font-size:15px}
+.label{font-size:10.5px;letter-spacing:.2em}
+.side nav a{font-size:11px;text-transform:uppercase;letter-spacing:.12em;border-width:1px;padding:3px 9px}
+.meta{font-size:11px;text-transform:uppercase;letter-spacing:.14em}
+.meta .cat{padding:2px 8px}
+.post h3{font-family:var(--f-head);font-weight:700;letter-spacing:-.015em;line-height:1.05}
+.text p:first-of-type::first-letter{font-family:var(--f-head);font-weight:700}
+.pull{font-family:var(--f-body);font-style:italic;font-size:25px;border-width:1px}
+.hero,.post,.spread{border-bottom:1px solid var(--ink)}
+.issue{font-size:11px;text-transform:uppercase;letter-spacing:.16em;border-width:1px;padding:6px 14px}
+.end p{font-size:11px;text-transform:uppercase;letter-spacing:.14em}
+.post-foot{font-size:12px;border-top-width:1px}
+@media (max-width:900px){.side{border-bottom:1px solid var(--ink)}}
 </style>
 
 <div class="shell">
@@ -416,26 +440,22 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
   <aside class="side" aria-label="About this zine">
     <figure class="avatar"><span class="img s-pinkroom" style="--ar:1/1;height:100%"></span></figure>
     <div class="who">
-      <h2>paper cuts</h2>
-      <div class="url">papercuts.zine</div>
+      <h2><br></h2>
+      <div class="url">elivula.com</div>
     </div>
-    <p class="bio">a messy little archive of essays, notes and photos i didn't delete. lorem ipsum dolor sit amet, prishtina based.<span class="blink">_</span></p>
+    <p class="bio"><br></p>
     <nav aria-label="Site">
       <a href="#">archive</a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
     </nav>
     <div class="block">
       <p class="label">tags</p>
-      <div class="tags">
-        <a href="#">#essays</a><a href="#">#film photos</a><a href="#">#notes to self</a>
-        <a href="#">#city</a><a href="#">#animals</a><a href="#">#lorem</a><a href="#">#ipsum</a>
+      <div class="tags"><br>
       </div>
     </div>
     <div class="block now-block">
       <p class="label">right now</p>
       <ul class="now">
-        <li>reading: lorem ipsum dolor</li>
-        <li>listening: sit amet on repeat</li>
-        <li>mood: overcast, but fine</li>
+        <li>e</li>
       </ul>
     </div>
   </aside>
@@ -443,124 +463,40 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
   <main class="main">
     <!-- hero collage -->
     <header class="hero">
-      <figure class="photo drag" style="--r:-8deg;width:200px;left:4%;top:40px"><span class="img s-sunset"></span><figcaption>summer, kinda</figcaption></figure>
-      <figure class="photo drag tape-corners" style="--r:6deg;width:170px;right:6%;top:30px"><span class="img s-night" style="--ar:1/1"></span><figcaption>3am walk home</figcaption></figure>
-      <figure class="photo drag torn bare" style="--r:-3deg;width:230px;left:12%;bottom:40px"><span class="img s-sea" style="--ar:3/2"></span></figure>
-      <figure class="photo drag pin hide-sm" style="--r:9deg;width:160px;right:20%;bottom:30px"><span class="img s-garden"></span><figcaption>grandma's yard</figcaption></figure>
-      <figure class="photo drag no-tape" style="--r:-12deg;width:130px;right:3%;top:52%"><span class="img s-bw" style="--ar:1/1"></span><figcaption>me??</figcaption></figure>
-      <figure class="photo drag hide-sm" style="--r:4deg;width:140px;left:34%;top:20px"><span class="img s-street" style="--ar:3/2"></span><figcaption>red stripe</figcaption></figure>
+      
+      
+      
+      
+      
+      
 
-      <div class="title">
-        <h1 class="ransom" aria-label="Eli Vula">
-          <span class="r1">E</span><span class="r2">li</span><span class="gap"></span><span class="r4">V</span><span class="r3">u</span><span class="r5">la</span>
-        </h1>
-        <div class="issue">issue no. 03 · autumn 2026 · 3 pieces</div>
-      </div>
+      
 
-      <div class="note" style="left:6%;top:47%">new stuff<br>below ↓</div>
-      <div class="stamp hide-sm" style="right:34%;top:68%;transform:rotate(-8deg)">handmade</div>
-      <span class="star" style="left:46%;bottom:60px;transform:rotate(12deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+      
+      
+      
       <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
     <div class="feed">
       <!-- post 1 -->
-      <article class="post">
-        <div class="gutter left">
-          <figure class="photo drag" style="--r:-6deg"><span class="img s-flash"></span><figcaption>kitchen, flash on</figcaption></figure>
-          <figure class="photo drag torn bare" style="--r:5deg"><span class="img s-blue" style="--ar:1/1"></span></figure>
-        </div>
-        <div class="text">
-          <div class="meta"><span class="cat">essay</span><span>oct 12, 2026</span><span>· 6 min read</span></div>
-          <h3>lorem ipsum and <mark>the art of</mark> <span class="pink">leaving early</span></h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, <span class="cutout">sunt in culpa qui officia</span> deserunt mollit anim id est laborum.</p>
-          <blockquote class="pull">"curabitur pretium tincidunt lacus, nulla gravida orci a odio."</blockquote>
-          <p>Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit.</p>
-          <p>Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi.</p>
-          <div class="post-foot">
-            <div class="t"><a href="#">#essays</a><a href="#">#notes to self</a><a href="#">#lorem</a></div>
-            <div class="acts">
-              <span class="notes">214 notes</span>
-              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
-              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
-            </div>
-          </div>
-        </div>
-        <div class="gutter right">
-          <figure class="photo drag pin" style="--r:7deg"><span class="img s-street"></span><figcaption>bus stop, 7:40</figcaption></figure>
-          <figure class="photo drag tape-corners" style="--r:-4deg"><span class="img s-garden" style="--ar:1/1"></span><figcaption>pink ones</figcaption></figure>
-        </div>
-      </article>
+      
 
       <!-- photo spread -->
-      <section class="spread" aria-label="Photo spread">
-        <figure class="photo drag" style="--r:-10deg;width:180px;left:5%;top:30px"><span class="img s-night"></span><figcaption>city lights</figcaption></figure>
-        <figure class="photo drag torn bare hide-sm" style="--r:4deg;width:220px;left:24%;top:150px"><span class="img s-sunset" style="--ar:3/2"></span></figure>
-        <figure class="photo drag" style="--r:8deg;width:170px;right:8%;top:40px"><span class="img s-pinkroom"></span><figcaption>my room</figcaption></figure>
-        <figure class="photo drag pin hide-sm" style="--r:-5deg;width:150px;right:28%;top:180px"><span class="img s-sea" style="--ar:1/1"></span><figcaption>ulcinj</figcaption></figure>
-        <div class="scrawl">photo dump, no context</div>
-      </section>
+      
 
       <!-- post 2 -->
-      <article class="post">
-        <div class="gutter left">
-          <figure class="photo drag no-tape" style="--r:-9deg"><span class="img s-bw"></span><figcaption>old scan</figcaption></figure>
-        </div>
-        <div class="text">
-          <div class="meta"><span class="cat">notes</span><span>oct 03, 2026</span><span>· 3 min read</span></div>
-          <h3><span class="pink">dolor sit</span> amet, a <mark>list of small things</mark></h3>
-          <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
-          <figure class="photo inline-photo drag" style="--r:2deg"><span class="img s-sea" style="--ar:3/2"></span><figcaption>lorem ipsum at the beach</figcaption></figure>
-          <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris.</p>
-          <p>Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus.</p>
-          <div class="post-foot">
-            <div class="t"><a href="#">#notes to self</a><a href="#">#ipsum</a></div>
-            <div class="acts">
-              <span class="notes">88 notes</span>
-              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
-              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
-            </div>
-          </div>
-        </div>
-        <div class="gutter right">
-          <figure class="photo drag" style="--r:6deg"><span class="img s-flash" style="--ar:1/1"></span><figcaption>birthday blur</figcaption></figure>
-          <figure class="photo drag torn bare" style="--r:-3deg"><span class="img s-night" style="--ar:3/4"></span></figure>
-        </div>
-      </article>
+      
 
       <!-- post 3 -->
-      <article class="post">
-        <div class="gutter left">
-          <figure class="photo drag pin" style="--r:5deg"><span class="img s-garden"></span><figcaption>mramor, spring</figcaption></figure>
-          <figure class="photo drag" style="--r:-7deg"><span class="img s-blue" style="--ar:1/1"></span><figcaption>blue hour</figcaption></figure>
-        </div>
-        <div class="text">
-          <div class="meta"><span class="cat">poem-ish</span><span>sep 21, 2026</span><span>· 2 min read</span></div>
-          <h3>consectetur, <mark>or how the</mark> light gets in</h3>
-          <p>Fusce convallis metus id felis luctus adipiscing. Pellentesque egestas, neque sit amet convallis pulvinar, justo nulla eleifend augue, ac auctor orci leo non est. Quisque id mi.</p>
-          <blockquote class="pull">"ut tincidunt tincidunt erat, aenean posuere tortor sed cursus."</blockquote>
-          <p>Phasellus gravida semper nisi. Nullam vel sem. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Sed hendrerit. Morbi ac felis.</p>
-          <div class="post-foot">
-            <div class="t"><a href="#">#poem-ish</a><a href="#">#animals</a><a href="#">#film photos</a></div>
-            <div class="acts">
-              <span class="notes">1,032 notes</span>
-              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
-              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
-            </div>
-          </div>
-        </div>
-        <div class="gutter right">
-          <figure class="photo drag tape-corners" style="--r:-5deg"><span class="img s-sunset" style="--ar:3/4"></span><figcaption>last warm day</figcaption></figure>
-        </div>
-      </article>
+      
     </div>
 
     <footer class="end">
-      <div class="ransom" aria-label="the end">
-        <span class="r3">the</span><span class="gap"></span><span class="r1">E</span><span class="r2">n</span><span class="r4">d</span>
+      <div class="ransom" aria-label="Eli Vula">
+        <span class="r1">E</span><span class="r2" style="font-family:&quot;Times New Roman&quot;,Times,serif">l</span><span class="r3">i</span><span class="gap"></span><span class="r4" style="font-family:&quot;Times New Roman&quot;,Times,serif">V</span><span class="r5">u</span><span class="r1">l</span><span class="r2" style="font-family:&quot;Times New Roman&quot;,Times,serif">a</span>
       </div>
-      <p>photocopied with love · more next issue · <a href="#">older posts →</a></p>
+      <p><br></p>
     </footer>
     <div class="board" id="board" aria-label="Your added photos"></div>
   </main>
