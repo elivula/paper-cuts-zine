@@ -453,10 +453,11 @@ body::after{opacity:.1}
 /* ---------- two languages: EN / SQ ---------- */
 body:not(.sq) .sq,body.sq .en{display:none!important}
 .tags>span{display:contents}
-.lang{display:flex;font-family:var(--f-label);font-size:11px;letter-spacing:.14em}
-.lang button{font:inherit;background:none;color:var(--ink);border:1px solid var(--ink);padding:3px 10px;cursor:pointer}
-.lang button+button{border-left:0}
-body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:var(--ink);color:var(--paper)}
+.lang{position:absolute;top:24px;right:max(28px,env(safe-area-inset-right,0px));z-index:9;display:flex;align-items:center;gap:10px;
+  font-family:var(--f-label);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.lang button{font:inherit;letter-spacing:inherit;text-transform:inherit;background:none;border:0;border-bottom:1px solid transparent;padding:2px 0;color:var(--ink-soft);cursor:pointer}
+.lang button:hover{color:var(--ink)}
+body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--ink);border-bottom-color:var(--ink)}
 .side>*{flex-shrink:0}
 @media (min-width:901px){.side .avatar{margin-inline:auto}.side .who{text-align:center}}
 
@@ -479,7 +480,6 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
     <nav aria-label="Site">
       <a href="#essays"><span class="en">essays</span><span class="sq" lang="sq">ese</span></a><a href="#about"><span class="en">about</span><span class="sq" lang="sq">rreth</span></a>
     </nav>
-    <div class="lang" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="sq">SQ</button></div>
     <div class="block">
       <p class="label"><span class="en">tags</span><span class="sq" lang="sq">etiketa</span></p>
       <div class="tags"><span class="en"><a href="#">#criticism</a> <a href="#">#clothes</a> <a href="#">#film</a> <a href="#">#rooms</a> <a href="#">#manners</a> <a href="#">#notes</a></span><span class="sq" lang="sq"><a href="#">#kritikë</a> <a href="#">#rroba</a> <a href="#">#film</a> <a href="#">#hapësira</a> <a href="#">#sjellje</a> <a href="#">#shënime</a></span></div>
@@ -497,6 +497,7 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
   <main class="main">
     <!-- hero collage -->
     <header class="hero">
+      <div class="lang" aria-label="Language"><button type="button" data-lang="en">English</button><span aria-hidden="true">·</span><button type="button" data-lang="sq" lang="sq">Shqip</button></div>
       <div class="title masthead" data-set="masthead">
         <div class="kicker"><span class="en">n° 01 · autumn 2026</span><span class="sq" lang="sq">nr. 01 · vjeshtë 2026</span></div>
         <h1 class="ransom" aria-label="Eli Vula">
@@ -655,7 +656,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1','lang-top-v1'];
+const pubLang=$('.hero .lang')?.cloneNode(true);
 const pubIntro=$('.masthead .intro')?.cloneNode(true);
 const BILINGUAL=['.bio','.side nav','.side .lang','.side .block:not(.now-block)','.side .now-block','.masthead .kicker','.masthead .tagline','.end p','#about'];
 const pubParts=BILINGUAL.map(s=>[s,$(s)?.cloneNode(true)]);
@@ -697,6 +699,12 @@ try{
       const tl=$('.masthead .tagline');
       if(tl&&pubIntro&&!$('.masthead .intro'))tl.after(pubIntro);
       $$('.hero .star[data-set="masthead"]').forEach(s=>{if(s.style.top==='64%'){s.style.left='23%';s.style.top='112px';s.style.width=s.style.height='40px'}});
+    }
+    // lang-top-v1: English · Shqip moves from the sidebar to the top right
+    if(!(d.fixes||[]).includes('lang-top-v1')){
+      $$('.side .lang').forEach(e=>e.remove());
+      const top=$('.hero');
+      if(top&&pubLang&&!top.querySelector('.lang'))top.prepend(pubLang);
     }
   }
 }catch(e){}
