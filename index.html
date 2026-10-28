@@ -288,8 +288,7 @@ mark{background:linear-gradient(transparent 55%,var(--hi) 55% 92%,transparent 92
 .editing [contenteditable="true"]{outline:none;cursor:text}
 .editing [contenteditable="true"]:hover{box-shadow:0 0 0 1.5px rgba(50,85,164,.3)}
 .editing [contenteditable="true"]:focus{box-shadow:0 0 0 2px var(--blue)}
-.editing [contenteditable="true"]:empty::before{content:"type here";color:var(--ink-soft)}
-.editing .photo figcaption:empty::before{content:"write a caption"}
+.editing .photo figcaption:empty::before{content:"write a caption";color:var(--ink-soft)}
 .editing .photo:not(.sel) figcaption:empty::before{content:""}
 .editing .photo{cursor:grab;touch-action:none;outline:1.5px dashed rgba(50,85,164,.45);outline-offset:4px}
 .editing .star{cursor:grab;touch-action:none}
