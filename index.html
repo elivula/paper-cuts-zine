@@ -459,7 +459,7 @@ body::after{opacity:.1}
       <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
       <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
     </div>
-    <p class="bio"><br></p>
+    <p class="bio">Essays, notes and photographs, written in Prishtina. Mostly about taste: clothes, films, rooms, and the people who stand in doorways. I watched films I was far too young for, with my mother, and nobody noticed I was paying attention. I still am. Trends are not discussed here, only judged.</p>
     <nav aria-label="Site">
       <a href="#"><br></a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
     </nav>
@@ -617,7 +617,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1'];
+const pubBio=$('.bio')?.innerHTML;
 const pubAvatar=$('.avatar')?.cloneNode(true);
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
 const pubSet=$$('[data-set="masthead"]').map(e=>e.cloneNode(true)),pubEnd=$('.end .ransom')?.cloneNode(true);
@@ -638,7 +639,10 @@ try{
     const av=$('.avatar');
     if(!(d.fixes||[]).includes('logo-v1')&&av&&pubAvatar&&av.querySelector('.img.s-pinkroom')&&!av.querySelector('.img').style.backgroundImage)av.replaceWith(pubAvatar);
     // logo-v2: load the E-only logo fresh instead of an old saved copy
-    else if(!(d.fixes||[]).includes('logo-v2')&&av&&pubAvatar&&av.classList.contains('logo'))av.replaceWith(pubAvatar);
+    if(!(d.fixes||[]).includes('logo-v2')&&av&&pubAvatar&&av.classList.contains('logo'))av.replaceWith(pubAvatar);
+    // bio-v1: fill the sidebar description, only if you left it empty
+    const bio=$('.bio');
+    if(!(d.fixes||[]).includes('bio-v1')&&bio&&pubBio&&!bio.textContent.trim())bio.innerHTML=pubBio;
   }
 }catch(e){}
 
