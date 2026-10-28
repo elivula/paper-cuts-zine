@@ -2,6 +2,7 @@
 <title>Paper Cuts Zine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="published-at" content="1793183765626">
+<link rel="icon" href="logo/eli-vula-icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=Permanent+Marker&family=Pacifico&family=VT323&family=UnifrakturMaguntia&display=swap">
 <style>
@@ -54,6 +55,8 @@ a{color:inherit}
   background:var(--paper-2);
   display:flex;flex-direction:column;gap:20px;
 }
+.avatar.logo{border:0;transform:none}
+.avatar.logo .img::after{display:none}
 .avatar{
   width:120px;aspect-ratio:1;border-radius:50%;
   border:3px solid var(--ink);position:relative;overflow:hidden;
@@ -452,7 +455,7 @@ body::after{opacity:.1}
 <div class="shell">
   <!-- Tumblr-style sidebar -->
   <aside class="side" aria-label="About this zine">
-    <figure class="avatar"><span class="img s-pinkroom" style="--ar:1/1;height:100%"></span></figure>
+    <figure class="avatar logo"><span class="img" style="--ar:1/1;height:100%;background:center/contain no-repeat url(&quot;logo/eli-vula-mark.svg&quot;)"></span></figure>
     <div class="who">
       <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
       <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
@@ -615,7 +618,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1'];
+const pubAvatar=$('.avatar')?.cloneNode(true);
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
 const pubSet=$$('[data-set="masthead"]').map(e=>e.cloneNode(true)),pubEnd=$('.end .ransom')?.cloneNode(true);
 try{
@@ -631,6 +635,9 @@ try{
       if(end&&pubEnd)end.replaceWith(pubEnd);
     }
     if(!(d.fixes||[]).includes('no-hello-v1'))$$('.note.hello').forEach(e=>e.remove());
+    // the logo replaces the old pink circle, but never a photo you put there yourself
+    const av=$('.avatar');
+    if(!(d.fixes||[]).includes('logo-v1')&&av&&pubAvatar&&av.querySelector('.img.s-pinkroom')&&!av.querySelector('.img').style.backgroundImage)av.replaceWith(pubAvatar);
   }
 }catch(e){}
 
@@ -929,7 +936,7 @@ picInput.addEventListener('change',async e=>{
   for(const file of files){
     try{
       const {src,ar}=await readImg(file);
-      if(t==='avatar'){$('.avatar .img').style.background=bgFor(src);break}
+      if(t==='avatar'){$('.avatar').classList.remove('logo');$('.avatar .img').style.background=bgFor(src);break}
       if(t==='swap'){if(sel)sel.querySelector('.img').style.background=bgFor(src);break}
       const f=newPhoto(src,ar);place(f,t||'board');last=f;
     }catch(err){toast("couldn't open "+file.name+", try a jpg or png")}
