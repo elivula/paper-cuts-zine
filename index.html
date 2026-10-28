@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Eli Vula</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="published-at" content="1793183765626">
+<meta name="published-at" content="1793186894021">
 <link rel="icon" href="logo/eli-vula-mark.svg?v=2" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=Permanent+Marker&family=Pacifico&family=VT323&family=UnifrakturMaguntia&display=swap">
@@ -474,7 +474,6 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
     <figure class="avatar logo"><span class="img" style="--ar:1/1;height:100%;background:center/contain no-repeat url(&quot;logo/eli-vula-mark.svg?v=2&quot;)"></span></figure>
     <div class="who">
       <h2>ELI VULA</h2>
-      <div class="url">elivula.com</div>
     </div>
     <p class="bio"><span class="en">Essays, notes and photographs. I notice things: the coat taken up by someone who didn’t love it, the man who stops dead at the top of the escalator, the film everyone calls a classic and nobody has finished. I was raised on cinema that was not meant for my age, and I have been paying attention ever since, mostly to things people would rather I didn’t. Trends are not covered here. They are reviewed.</span><span class="sq" lang="sq">Ese, shënime dhe fotografi. I vërej gjërat: pallton e shkurtuar nga dikush që s’e donte, burrin që ndalet në vend në krye të shkallëve lëvizëse, filmin që të gjithë e quajnë klasik e askush s’e ka parë deri në fund. U rrita me kinema që s’ishte për moshën time dhe që atëherë s’kam pushuar së vëzhguari, kryesisht gjërat që njerëzit do të donin të mos i vija re. Trendet nuk mbulohen këtu. Ato recensohen.</span></p>
     <nav aria-label="Site">
@@ -505,10 +504,10 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:v
         </h1>
         <p class="tagline"><span class="en">criticism of clothes, films, rooms, and the people inside them</span><span class="sq" lang="sq">kritikë për rrobat, filmat, dhomat dhe njerëzit brenda tyre</span></p>
         <div class="intro" id="about">
-          <div class="en"><p>Eli Vula writes criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
+          <div class="en"><p>I write criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
           <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
           <p>Written for anyone, anywhere, who has ever stood in a room and silently corrected it.</p></div>
-          <div class="sq" lang="sq"><p>Eli Vula shkruan kritikë ashtu siç disa njerëz bëjnë inventar: ngadalë dhe me dritat ndezur. Temat janë rrobat, filmat, dhomat dhe sjelljet, e pyetja është gjithmonë e njëjta: a po i kushtonte dikush vëmendje? Zakonisht përgjigjja është jo. Këtu, dikush po i kushtonte.</p>
+          <div class="sq" lang="sq"><p>Shkruaj kritikë ashtu siç disa njerëz bëjnë inventar: ngadalë dhe me dritat ndezur. Temat janë rrobat, filmat, dhomat dhe sjelljet, e pyetja është gjithmonë e njëjta: a po i kushtonte dikush vëmendje? Zakonisht përgjigjja është jo. Këtu, dikush po i kushtonte.</p>
           <p>Ky nuk është blog për stil jetese. Asgjë nuk shitet, askush nuk sponsorizohet dhe askujt nuk do t’i thuhet ta dojë veten. Ka ese, ka shënime dhe ka fotografi që nuk u fshinë me arsye.</p>
           <p>Shkruar për këdo, kudo, që ka qëndruar ndonjëherë në një dhomë dhe e ka korrigjuar në heshtje.</p></div>
         </div>
@@ -861,7 +860,7 @@ function act(a){
 }
 $$('.sel-tools [data-act]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.act)));
 
-// keyboard: arrows move, [ ] turn, - = resize, delete removes
+// keyboard: arrows move, [ ] turn, - = resize (deleting is only ever the "delete" button)
 document.addEventListener('keydown',e=>{
   if(!editing||!sel||e.target.isContentEditable||/INPUT|TEXTAREA/.test(e.target.tagName))return;
   const el=sel,step=e.shiftKey?20:4,rv=rotVar(el);
@@ -872,7 +871,6 @@ document.addEventListener('keydown',e=>{
     '-':()=>setNum(el,'--s',Math.max(.3,num(el,'--s',1)-.05),''),'=':()=>setNum(el,'--s',Math.min(4,num(el,'--s',1)+.05),''),
   };
   if(map[e.key]){e.preventDefault();map[e.key]();save()}
-  else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();act('delete')}
   else if(e.key==='Escape')select(null);
 });
 
