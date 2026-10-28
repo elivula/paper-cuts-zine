@@ -466,6 +466,7 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--
 .title.masthead{position:relative;left:auto;top:auto;transform:none;margin:0 auto}
 .masthead .intro{max-width:34rem;margin:40px auto 0;padding-top:28px;border-top:1px solid var(--ink);text-align:left;font-size:17px;line-height:1.65}
 .masthead .intro p{margin:0 0 1em}
+.masthead .intro .intro-head{font-family:var(--f-head);font-style:italic;font-weight:700;font-size:22px;margin:0 0 14px}
 .masthead .intro p:last-child{margin:0;font-style:italic}
 
 /* ---------- long reviews: section heads, named photo frames ---------- */
@@ -537,6 +538,7 @@ body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{color:var(--
           <span class="r8">E</span><span class="r6">l</span><span class="r3">i</span><span class="gap"></span><span class="r1">V</span><span class="r2">u</span><span class="r7">l</span><span class="r6 tilt">a</span>
         </h1>
         <div class="intro" id="about">
+          <p class="intro-head"><span class="en">Here is a little about me</span><span class="sq" lang="sq">Pak për mua</span></p>
           <div class="en"><p>I write criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
           <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
           <p>Written for anyone, anywhere, who has ever stood in a room and silently corrected it.</p></div>
@@ -728,7 +730,8 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1','lang-top-v1','post-angels-v1','post-angels-v2','mysterious-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1','about-top-v1','lang-top-v1','post-angels-v1','post-angels-v2','mysterious-v1','about-head-v1'];
+const pubIntroHead=$('.masthead .intro .intro-head')?.cloneNode(true);
 const pubLang=$('.hero .lang')?.cloneNode(true);
 const pubIntro=$('.masthead .intro')?.cloneNode(true);
 const BILINGUAL=['.bio','.side nav','.side .lang','.side .block:not(.now-block)','.side .now-block','.masthead .kicker','.masthead .tagline','.end p','#about'];
@@ -780,6 +783,9 @@ try{
     }
     // mysterious-v1: no star, issue line, tagline or "currently" list
     if(!(d.fixes||[]).includes('mysterious-v1'))$$('.hero .star,.masthead .kicker,.masthead .tagline,.side .now-block').forEach(e=>e.remove());
+    // about-head-v1: a heading over the About text
+    const intro=$('.masthead .intro');
+    if(!(d.fixes||[]).includes('about-head-v1')&&intro&&pubIntroHead&&!intro.querySelector('.intro-head'))intro.prepend(pubIntroHead);
   }
 }catch(e){}
 // posts Claude wrote wait at the top of your essays (only for you) until you publish them
