@@ -2,7 +2,7 @@
 <title>Paper Cuts Zine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=Permanent+Marker&family=Pacifico&family=VT323&family=UnifrakturMaguntia&display=swap">
 <style>
 /* Layout: photocopied zine page, Tumblr sidebar on the left, calm reading column in the middle, taped photos scattered in the margins */
 :root{
@@ -267,7 +267,18 @@ a{color:inherit}
 .pink{color:var(--pink)}
 mark{background:linear-gradient(transparent 55%,var(--hi) 55% 92%,transparent 92%);color:inherit;padding:0 2px}
 /* everything that isn't a photo moves with these, on top of its own tilt */
-:is(.note,.stamp,.scrawl,.star,.title,.sticker){translate:var(--dx,0px) var(--dy,0px);rotate:var(--r2,0deg);scale:var(--s,1)}
+:is(.note,.stamp,.scrawl,.star,.title,.sticker,.cutword,.ransom>span:not(.gap)){translate:var(--dx,0px) var(--dy,0px);rotate:var(--r2,0deg);scale:var(--s,1)}
+/* so a letter block doesn't also pick up its title's move */
+@property --dx{syntax:'<length>';inherits:false;initial-value:0px}
+@property --dy{syntax:'<length>';inherits:false;initial-value:0px}
+@property --r2{syntax:'<angle>';inherits:false;initial-value:0deg}
+@property --s{syntax:'<number>';inherits:false;initial-value:1}
+.ransom span{position:relative}
+.cutword{z-index:6;width:max-content;max-width:90vw}
+.cutword span{font-size:44px}
+.cutword .gap{width:16px}
+.dock select{font:inherit;color:inherit;background:var(--ink);border:1.5px solid rgba(236,235,229,.35);padding:4px 6px;cursor:pointer}
+.dock select option{color:var(--ink);background:#fff}
 
 /* ---------- editor (owner only) ---------- */
 .editing [contenteditable="true"]{outline:none;cursor:text}
@@ -440,8 +451,8 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
       <figure class="photo drag hide-sm" style="--r:4deg;width:140px;left:34%;top:20px"><span class="img s-street" style="--ar:3/2"></span><figcaption>red stripe</figcaption></figure>
 
       <div class="title">
-        <h1 class="ransom" aria-label="paper cuts">
-          <span class="r1">pa</span><span class="r2">P</span><span class="r3">er</span><span class="gap"></span><span class="r4">C</span><span class="r5">uts</span>
+        <h1 class="ransom" aria-label="Eli Vula">
+          <span class="r1">E</span><span class="r2">li</span><span class="gap"></span><span class="r4">V</span><span class="r3">u</span><span class="r5">la</span>
         </h1>
         <div class="issue">issue no. 03 · autumn 2026 · 3 pieces</div>
       </div>
@@ -556,13 +567,14 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
 </div>
 
 <div class="dock" role="toolbar" aria-label="Editing tools">
-  <span class="tip">click any words to type · drag photos to move them · click a note or the title, then drag its pink ✥ · ⟳ turns, ⤡ resizes</span>
+  <span class="tip">click any words to type · drag photos to move them · click a note, a letter block or the title, then drag its pink ✥ · ⟳ turns, ⤡ resizes</span>
   <button type="button" id="edit-toggle" class="primary">✎ edit</button>
   <div class="dock-edit grp">
     <div class="grp"><span class="lbl">add</span>
       <button type="button" data-add="photo">+ photo</button>
       <button type="button" data-add="text">+ text</button>
       <button type="button" data-add="post">+ post</button>
+      <button type="button" data-add="cut">+ cut-out word</button>
       <button type="button" data-add="spread">+ photo page</button>
     </div>
     <span class="sep"></span>
@@ -573,6 +585,23 @@ body:not(.sel-photo) .dock .only-photo,body:not(.sel-photo):not(.sel-sticker) .d
       <button type="button" data-fmt="pink">pink</button>
       <button type="button" data-fmt="quote">big quote</button>
       <button type="button" data-fmt="link">link</button>
+      <select id="font-pick" aria-label="Font">
+        <option value="">font ▾</option>
+        <option value='"Times New Roman",Times,serif' style='font-family:"Times New Roman"'>Times New Roman</option>
+        <option value="Georgia,serif" style="font-family:Georgia">Georgia</option>
+        <option value="Arial,Helvetica,sans-serif" style="font-family:Arial">Arial</option>
+        <option value='"Courier Prime","Courier New",monospace' style='font-family:"Courier Prime"'>Courier</option>
+        <option value='"Special Elite",monospace' style='font-family:"Special Elite"'>Typewriter</option>
+        <option value="Caveat,cursive" style="font-family:Caveat">Handwriting</option>
+        <option value='"Bowlby One",Impact,sans-serif' style='font-family:"Bowlby One"'>Chunky</option>
+        <option value='"Playfair Display",serif' style='font-family:"Playfair Display"'>Playfair</option>
+        <option value='"Abril Fatface",serif' style='font-family:"Abril Fatface"'>Magazine</option>
+        <option value='"Permanent Marker",cursive' style='font-family:"Permanent Marker"'>Marker</option>
+        <option value="Pacifico,cursive" style="font-family:Pacifico">Pacifico</option>
+        <option value="VT323,monospace" style="font-family:VT323">Pixel</option>
+        <option value="UnifrakturMaguntia,serif" style="font-family:UnifrakturMaguntia">Old English</option>
+        <option value='"Comic Sans MS","Comic Sans",cursive' style='font-family:"Comic Sans MS"'>Comic Sans</option>
+      </select>
     </div>
     <div class="sel-tools grp"><span class="sep"></span><span class="lbl">selected</span>
       <button type="button" data-act="rotl" aria-label="Turn left">⟲</button>
@@ -639,16 +668,23 @@ document.body.classList.add('owner');
 store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
+// changes made to the page outside the editor are carried into older drafts once, by id
+const FIXES=['title-eli-vula'];
+const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
 try{
   const d=JSON.parse(store.get(DRAFT_KEY));
-  if(d&&d.html&&d.savedAt>=publishedAt())shell.innerHTML=d.html;
+  if(d&&d.html&&d.savedAt>=publishedAt()){
+    shell.innerHTML=d.html;
+    const t=$('.hero .title .ransom');
+    if(!(d.fixes||[]).includes('title-eli-vula')&&t&&pubTitle)t.replaceWith(pubTitle);
+  }
 }catch(e){}
 
 let toastT;
 function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,3200)}
 
-const MOVABLE='.photo,.note,.stamp,.scrawl,.star,.title,.sticker';
-const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom span:not(.gap),.issue,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
+const MOVABLE='.photo,.note,.stamp,.scrawl,.star,.title,.sticker,.cutword,.ransom>span:not(.gap)';
+const TEXT='.side h2,.side .url,.bio,.side nav,.label,.tags,.now,.ransom>span:not(.gap),.issue,.note,.stamp,.scrawl,.sticker,.text,.end p,figcaption';
 const ISLANDS='.text .post-foot,.text .photo';
 const ISLAND_TEXT='.post-foot .t';
 const within=(sel,root)=>[...(root.matches&&root.matches(sel)?[root]:[]),...$$(sel,root)];
@@ -671,7 +707,7 @@ let saveT,dirty=false,resetting=false;
 function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(()=>saveNow(),400)}
 function saveNow(at=Date.now()){
   clearTimeout(saveT);dirty=false;
-  if(!store.set(DRAFT_KEY,JSON.stringify({html:snapshot(),savedAt:at})))
+  if(!store.set(DRAFT_KEY,JSON.stringify({html:snapshot(),savedAt:at,fixes:FIXES})))
     toast("couldn't keep a backup on this device (lots of new photos?). publish to save them");
 }
 
@@ -865,6 +901,29 @@ function fmt(f){
 }
 $$('[data-fmt]').forEach(b=>b.addEventListener('click',()=>fmt(b.dataset.fmt)));
 
+// fonts: selected words get wrapped; otherwise the selected thing, or the line you're typing in, changes
+let lastRange=null;
+document.addEventListener('selectionchange',()=>{const x=editableRange();if(x)lastRange=x.r.cloneRange()});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('.dock')&&!e.target.isContentEditable)lastRange=null},true);
+$('#font-pick').addEventListener('change',e=>{
+  const f=e.target.value;e.target.value='';
+  if(!f)return;
+  const r=lastRange&&shell.contains(lastRange.commonAncestorContainer)?lastRange:null;
+  if(r&&!r.collapsed){
+    const w=document.createElement('span');w.style.fontFamily=f;
+    w.append(r.extractContents());r.insertNode(w);
+    const s=getSelection();s.removeAllRanges();s.selectAllChildren(w);lastRange=null;
+  }else if(sel){
+    const targets=sel.matches('.title,.cutword')?$$('.ransom>span:not(.gap)',sel)
+      :isPhoto(sel)?[sel.querySelector('figcaption')]:[sel];
+    targets.forEach(t=>t&&(t.style.fontFamily=f));
+  }else if(r){
+    const n=r.commonAncestorContainer,el=(n.nodeType===1?n:n.parentElement).closest('p,h1,h2,h3,blockquote,li,figcaption,span,a,div');
+    if(el&&el.isContentEditable)el.style.fontFamily=f;
+  }else{toast('select some words, or click a note or letter block first');return}
+  save();
+});
+
 /* ---------- adding photos, text, posts, photo pages ---------- */
 const bgFor=src=>'center/cover no-repeat url("'+src+'")';
 function readImg(file){
@@ -949,6 +1008,22 @@ function add(kind){
       +'<h3>new post title</h3><p>start writing here…</p>'
       +'<div class="post-foot"><div class="t"><a href="#">#notes to self</a></div><div class="acts"><span class="notes">0 notes</span>'+LIKE+'</div></div></div><div class="gutter right"></div>';
     insertSection(a);setTimeout(()=>selectText(a.querySelector('h3')),350);save();return;
+  }
+  if(kind==='cut'){
+    const words=(prompt('type your cut-out words:')||'').trim();
+    if(!words)return;
+    const w=document.createElement('div');w.className='ransom cutword';
+    let style=Math.floor(Math.random()*5);
+    words.split(/\s+/).forEach((word,wi)=>{
+      if(wi){const g=document.createElement('span');g.className='gap';w.append(g)}
+      for(let k=0;k<word.length;){
+        const n=1+Math.floor(Math.random()*Math.min(3,word.length-k));
+        const b=document.createElement('span');b.className='r'+(style++%5+1);b.textContent=word.slice(k,k+n);
+        w.append(b);k+=n;
+      }
+    });
+    const p=spotIn($('.main'),260);w.style.left=p.left+'%';w.style.top=p.top+'px';
+    $('#board').append(w);prep(w);select(w);save();return;
   }
   if(kind==='spread'){
     const s=document.createElement('section');s.className='spread';s.setAttribute('aria-label','Photo spread');
