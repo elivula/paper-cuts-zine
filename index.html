@@ -1,0 +1,804 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Paper Cuts Zine</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap">
+<style>
+/* Layout: photocopied zine page, Tumblr sidebar on the left, calm reading column in the middle, taped photos scattered in the margins */
+:root{
+  --paper:#ecebe5;
+  --paper-2:#e2e0d8;
+  --ink:#1b1a1f;
+  --ink-soft:#4a4852;
+  --pink:#ff48b0;
+  --blue:#3255a4;
+  --hi:#fff275;
+  --tape:rgba(255,248,214,.72);
+  --f-display:"Bowlby One","Arial Black",Impact,sans-serif;
+  --f-body:"Courier Prime","Courier New",ui-monospace,monospace;
+  --f-type:"Special Elite","Courier New",monospace;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+body::after{ /* photocopy grain over everything */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background-image:var(--grain);opacity:.22;mix-blend-mode:multiply;
+}
+a{color:inherit}
+:focus-visible{outline:2px dashed var(--pink);outline-offset:3px}
+
+.shell{
+  display:grid;grid-template-columns:250px minmax(0,1fr);
+  min-height:100%;
+}
+
+/* ---------- sidebar ---------- */
+.side{
+  position:sticky;top:env(safe-area-inset-top,0px);align-self:start;
+  height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  overflow:auto;
+  padding-block:28px;
+  padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:22px;
+  border-right:2px dashed var(--ink);
+  background:var(--paper-2);
+  display:flex;flex-direction:column;gap:20px;
+}
+.avatar{
+  width:120px;aspect-ratio:1;border-radius:50%;
+  border:3px solid var(--ink);position:relative;overflow:hidden;
+  transform:rotate(-4deg);
+}
+.side h2{font-family:var(--f-display);font-size:22px;line-height:1;margin:0}
+.side .url{font-family:var(--f-type);font-size:13px;color:var(--ink-soft)}
+.bio{font-size:14px;margin:0}
+.side nav{display:flex;flex-wrap:wrap;gap:6px}
+.side nav a{
+  font-family:var(--f-type);font-size:13px;text-decoration:none;
+  border:1.5px solid var(--ink);padding:2px 9px;background:var(--paper);
+}
+.side nav a:hover{background:var(--ink);color:var(--paper)}
+.label{font-family:var(--f-type);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 6px}
+.tags{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px}
+.tags a{text-decoration:none;color:var(--blue)}
+.tags a:hover{text-decoration:underline wavy var(--pink)}
+.now{font-size:13px;margin:0;padding-left:16px}
+.now li{margin-bottom:4px}
+.blink{color:var(--pink);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ---------- photos ---------- */
+.photo{
+  --r:0deg;--dx:0px;--dy:0px;--s:1;
+  position:relative;display:block;margin:0;
+  background:#fbfaf6;padding:8px 8px 30px;
+  box-shadow:0 1px 1px rgba(0,0,0,.15),0 8px 18px -6px rgba(0,0,0,.35);
+  transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(var(--s));
+  transition:box-shadow .2s;
+  user-select:none;
+}
+.photo figcaption{
+  position:absolute;left:10px;right:10px;bottom:3px;
+  font-family:var(--f-hand);font-size:19px;line-height:1.1;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.photo.bare{padding:0;background:none}
+.photo.bare figcaption{display:none}
+.photo.torn .img{clip-path:polygon(0 3%,8% 0,17% 4%,29% 1%,41% 5%,55% 0,68% 4%,81% 1%,93% 5%,100% 2%,100% 96%,90% 100%,77% 96%,63% 100%,49% 95%,36% 99%,22% 95%,10% 100%,0 96%)}
+.photo::before{ /* tape */
+  content:"";position:absolute;top:-12px;left:50%;width:78px;height:24px;
+  background:var(--tape);transform:translateX(-50%) rotate(-3deg);
+  box-shadow:0 1px 2px rgba(0,0,0,.12);z-index:2;
+}
+.photo.tape-corners::before{left:-14px;top:-6px;transform:rotate(-38deg);width:60px}
+.photo.no-tape::before{display:none}
+.photo.pin::before{
+  width:16px;height:16px;border-radius:50%;background:var(--pink);
+  top:-6px;transform:translateX(-50%);box-shadow:0 2px 3px rgba(0,0,0,.35);
+}
+.img{
+  position:relative;display:block;width:100%;aspect-ratio:var(--ar,4/5);overflow:hidden;
+}
+.img::after{ /* film grain + flash vignette on every photo */
+  content:"";position:absolute;inset:0;
+  background-image:var(--grain);opacity:.45;mix-blend-mode:overlay;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.45);
+}
+/* scenes, drawn in CSS so the demo needs no image files */
+.s-sunset{background:radial-gradient(circle at 60% 62%,#ffe7a3 0 9%,transparent 10%),linear-gradient(#f9b27a,#ee6d8e 50%,#5c3a87 78%,#2a1d40 78.5%)}
+.s-sea{background:radial-gradient(ellipse at 30% 20%,#fff 0 6%,transparent 18%),linear-gradient(#c7dde8 0 46%,#3d6f8f 46.5%,#1d4058)}
+.s-night{background:
+  radial-gradient(circle at 20% 70%,#ffd36b 0 1.5%,transparent 2.5%),
+  radial-gradient(circle at 45% 64%,#ff7ab8 0 1.2%,transparent 2.2%),
+  radial-gradient(circle at 70% 74%,#ffd36b 0 1.5%,transparent 2.5%),
+  radial-gradient(circle at 82% 60%,#9fd2ff 0 1%,transparent 2%),
+  radial-gradient(circle at 35% 80%,#ffd36b 0 1%,transparent 2%),
+  linear-gradient(#0e0f26 0 55%,#1b1a3a 55%,#09091a)}
+.s-flash{background:radial-gradient(circle at 50% 45%,#fff6e8 0 12%,#e9a679 32%,#7c3d2a 70%,#2b140e)}
+.s-garden{background:
+  radial-gradient(circle at 25% 35%,#ff86c2 0 6%,transparent 7%),
+  radial-gradient(circle at 62% 28%,#fff 0 5%,transparent 6%),
+  radial-gradient(circle at 75% 60%,#ff5aa5 0 7%,transparent 8%),
+  radial-gradient(circle at 38% 70%,#ffd84a 0 5%,transparent 6%),
+  linear-gradient(160deg,#6c9a54,#2f5a32)}
+.s-street{background:linear-gradient(90deg,transparent 0 62%,#d23b3b 62% 66%,transparent 66%),linear-gradient(#b9b6ae 0 40%,#8d8a83 40% 70%,#5a5852 70%)}
+.s-blue{background:radial-gradient(circle at 70% 30%,#cfe0ff 0 8%,transparent 30%),linear-gradient(200deg,#3255a4,#152452)}
+.s-pinkroom{background:linear-gradient(90deg,transparent 0 30%,rgba(255,255,255,.35) 30% 31%,transparent 31%),radial-gradient(circle at 40% 40%,#ffd0e6,#ff48b0 70%,#9b1f63)}
+.s-bw{background:radial-gradient(circle at 40% 35%,#f4f4f4 0 10%,#9a9a9a 40%,#2a2a2a);filter:grayscale(1) contrast(1.2)}
+
+/* ---------- hero ---------- */
+.main{min-width:0;position:relative;overflow-x:clip}
+.hero{
+  position:relative;height:620px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  border-bottom:2px solid var(--ink);
+}
+.title{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-56%) rotate(-2deg);
+  z-index:5;text-align:center;width:min(92%,640px);
+}
+.ransom{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:0;font-weight:400}
+.ransom span{
+  display:inline-block;font-size:clamp(40px,7vw,78px);line-height:1;padding:6px 8px;
+  box-shadow:2px 3px 0 rgba(0,0,0,.25);
+}
+.ransom .gap{width:22px;box-shadow:none;padding:0}
+.r1{font-family:var(--f-display);background:var(--ink);color:var(--paper);transform:rotate(-4deg)}
+.r2{font-family:var(--f-type);background:var(--hi);transform:rotate(3deg)}
+.r3{font-family:Georgia,serif;font-style:italic;background:var(--pink);color:#fff;transform:rotate(-2deg)}
+.r4{font-family:var(--f-display);background:#fff;border:2px solid var(--ink);transform:rotate(5deg)}
+.r5{font-family:var(--f-hand);font-weight:700;background:var(--blue);color:#fff;transform:rotate(-6deg)}
+.issue{
+  display:inline-block;margin-top:22px;font-family:var(--f-type);font-size:15px;
+  background:var(--paper);border:2px solid var(--ink);padding:4px 12px;transform:rotate(1.5deg);
+}
+.hero .photo{position:absolute}
+.note{
+  position:absolute;font-family:var(--f-hand);font-size:24px;line-height:1.15;color:var(--blue);z-index:6;
+}
+.stamp{
+  position:absolute;z-index:6;font-family:var(--f-type);font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--pink);border:3px double var(--pink);padding:8px 12px;border-radius:6px;opacity:.85;
+}
+.star{position:absolute;z-index:6;width:64px;height:64px}
+
+/* ---------- posts ---------- */
+.feed{display:flex;flex-direction:column}
+.post{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,38rem) minmax(0,1fr);
+  column-gap:36px;
+  padding-block:72px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  border-bottom:2px dashed var(--ink);
+  position:relative;
+}
+.post:nth-child(even){background:var(--paper-2)}
+.gutter{display:flex;flex-direction:column;align-items:center;gap:56px;padding-top:30px;position:relative;z-index:3}
+.gutter .photo{width:min(100%,220px)}
+.gutter.left{grid-column:1;grid-row:1}
+.gutter.right{grid-column:3;grid-row:1}
+.text{grid-column:2;grid-row:1;min-width:0;position:relative;z-index:2}
+.meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-family:var(--f-type);font-size:13px;color:var(--ink-soft);margin-bottom:10px}
+.meta .cat{background:var(--ink);color:var(--paper);padding:1px 8px}
+.post h3{
+  font-family:var(--f-display);font-weight:400;font-size:clamp(30px,4.2vw,48px);line-height:1.02;
+  margin:0 0 22px;text-wrap:balance;
+}
+.post h3 mark{background:linear-gradient(transparent 55%,var(--hi) 55% 92%,transparent 92%);color:inherit;padding:0 4px}
+.post h3 .pink{color:var(--pink)}
+.text p{margin:0 0 1.1em}
+.text p:first-of-type::first-letter{
+  font-family:var(--f-display);font-size:3.4em;float:left;line-height:.85;margin:6px 10px 0 0;color:var(--blue);
+}
+.pull{
+  margin:28px -10px;padding:18px 22px;border:2px solid var(--ink);background:var(--paper);
+  font-family:var(--f-type);font-size:21px;line-height:1.35;transform:rotate(-1.2deg);
+  box-shadow:5px 5px 0 var(--pink);
+}
+.inline-photo{margin:30px auto;width:min(100%,340px)}
+.cutout{
+  display:inline;background:var(--ink);color:var(--paper);padding:0 4px;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.post-foot{
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;
+  margin-top:30px;padding-top:14px;border-top:1.5px solid var(--ink);font-size:13px;
+}
+.post-foot .t{display:flex;flex-wrap:wrap;gap:4px 10px}
+.post-foot .t a{color:var(--blue);text-decoration:none}
+.acts{display:flex;align-items:center;gap:14px;font-family:var(--f-type)}
+.acts button{
+  background:none;border:0;padding:4px;cursor:pointer;color:var(--ink);display:inline-flex;
+}
+.acts button svg{width:22px;height:22px}
+.acts button[aria-pressed="true"]{color:var(--pink)}
+.acts button[aria-pressed="true"] svg{fill:currentColor}
+.notes{color:var(--ink-soft)}
+
+/* spread between posts */
+.spread{
+  position:relative;height:380px;border-bottom:2px dashed var(--ink);
+  background:
+    repeating-linear-gradient(0deg,transparent 0 31px,rgba(50,85,164,.18) 31px 32px),
+    var(--paper);
+}
+.spread .photo{position:absolute}
+.spread .scrawl{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-3deg);z-index:6;
+  font-family:var(--f-hand);font-size:clamp(28px,4vw,44px);color:var(--ink);text-align:center;line-height:1.1;
+  background:var(--hi);padding:10px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.2);
+  width:max-content;max-width:90%;
+}
+
+.end{
+  padding-block:60px 80px;text-align:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.end .ransom span{font-size:32px}
+.end p{font-family:var(--f-type);color:var(--ink-soft);font-size:14px;margin-top:18px}
+
+.hint{
+  position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:18px;z-index:7;
+  font-family:var(--f-hand);font-size:22px;color:var(--pink);transform:rotate(-4deg);
+}
+
+/* ---------- your own photos layer ---------- */
+.board{position:absolute;inset:0;pointer-events:none;z-index:8}
+.board .photo{position:absolute;pointer-events:auto}
+.board .img{aspect-ratio:var(--ar,4/5)}
+
+/* ---------- layout editor ---------- */
+.h-rot,.h-size{display:none}
+.editing .photo{cursor:grab;touch-action:none;outline:1.5px dashed rgba(50,85,164,.45);outline-offset:4px}
+.editing .photo.dragging{cursor:grabbing}
+.editing .photo.sel{outline:2px dashed var(--pink)}
+.editing .photo.sel .h-rot,.editing .photo.sel .h-size{
+  display:block;position:absolute;z-index:4;width:22px;height:22px;
+  background:var(--pink);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.h-rot{top:-16px;right:-16px;border-radius:50%;cursor:alias}
+.h-rot::after{content:"⟳";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
+.h-size{bottom:-16px;right:-16px;cursor:nwse-resize}
+.editing .photo figcaption{cursor:text;outline:none}
+.editing .photo figcaption:focus{background:var(--hi)}
+.editing .photo figcaption:empty::before{content:"write a caption";color:var(--ink-soft)}
+.editing .photo:not(.sel) figcaption:empty::before{content:""}
+
+.dock{
+  position:fixed;left:50%;transform:translateX(-50%);z-index:60;
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  width:max-content;max-width:calc(100% - 24px);
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;
+  background:var(--ink);color:var(--paper);padding:8px;
+  font-family:var(--f-type);font-size:13px;
+  box-shadow:4px 4px 0 var(--pink);
+}
+.dock button,.dock .btn{
+  font:inherit;color:inherit;background:transparent;border:1.5px solid rgba(236,235,229,.35);
+  padding:5px 10px;cursor:pointer;white-space:nowrap;line-height:1.2;
+}
+.dock button:hover,.dock .btn:hover{background:var(--paper);color:var(--ink)}
+.dock .primary{background:var(--pink);border-color:var(--pink);color:#fff}
+.dock .primary:hover{background:#fff;color:var(--ink)}
+.dock .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.dock .sep{width:1px;align-self:stretch;background:rgba(236,235,229,.3)}
+.dock .tiny{opacity:.7;padding:0 4px}
+.dock-edit,.sel-tools{display:none}
+.editing .dock-edit{display:flex}
+.editing.has-sel .sel-tools{display:flex}
+.editing.has-sel .no-sel-msg{display:none}
+.editing{padding-bottom:140px}
+.dock .warn{background:#d23b3b;border-color:#d23b3b;color:#fff}
+
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);z-index:61;
+  bottom:calc(84px + env(safe-area-inset-bottom,0px));
+  background:var(--hi);color:var(--ink);border:2px solid var(--ink);
+  font-family:var(--f-type);font-size:13px;padding:6px 12px;max-width:calc(100% - 32px);
+}
+.export{
+  position:fixed;inset:auto 16px calc(84px + env(safe-area-inset-bottom,0px));z-index:62;
+  max-width:560px;margin:0 auto;background:var(--paper);border:2px solid var(--ink);padding:12px;
+  box-shadow:5px 5px 0 var(--blue);font-family:var(--f-type);font-size:13px;
+}
+.export textarea{width:100%;height:120px;font:12px/1.4 var(--f-body);background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.export .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.export button{font:inherit;background:var(--ink);color:var(--paper);border:0;padding:4px 10px;cursor:pointer}
+
+@media (max-width:900px){
+  body:not(.editing) .gutter .photo{--dx:0px!important;--dy:0px!important}
+}
+
+/* ---------- small screens ---------- */
+@media (max-width:1100px){
+  .post{grid-template-columns:minmax(0,1fr) minmax(0,36rem) minmax(0,1fr);column-gap:22px}
+  .gutter .photo{width:min(100%,170px)}
+}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{
+    position:static;height:auto;border-right:0;border-bottom:2px dashed var(--ink);
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+    display:grid;grid-template-columns:auto 1fr;gap:12px 18px;align-items:center;
+  }
+  .avatar{width:84px}
+  .side .who{min-width:0}
+  .side .bio,.side nav,.side .block{grid-column:1/-1}
+  .side .block.now-block{display:none}
+  .post{grid-template-columns:minmax(0,1fr);padding-block:52px}
+  .text{grid-column:1;grid-row:2}
+  .gutter.left{grid-column:1;grid-row:1}
+  .gutter.right{grid-column:1;grid-row:3}
+  .gutter{flex-direction:row;justify-content:center;gap:18px;padding-top:0;margin-bottom:30px;flex-wrap:wrap}
+  .gutter.right{margin:30px 0 0}
+  .gutter .photo{width:min(44%,190px)}
+  .hero{height:540px}
+  .pull{margin-inline:0}
+}
+@media (max-width:560px){
+  .hero{height:600px}
+  .hero .photo.hide-sm,.spread .photo.hide-sm,.hero .hide-sm{display:none}
+  .spread{height:320px}
+}
+@media (prefers-reduced-motion:reduce){
+  .blink{animation:none}
+  *{transition:none!important}
+}
+</style>
+
+<div class="shell">
+  <!-- Tumblr-style sidebar -->
+  <aside class="side" aria-label="About this zine">
+    <figure class="avatar"><span class="img s-pinkroom" style="--ar:1/1;height:100%"></span></figure>
+    <div class="who">
+      <h2>paper cuts</h2>
+      <div class="url">papercuts.zine</div>
+    </div>
+    <p class="bio">a messy little archive of essays, notes and photos i didn't delete. lorem ipsum dolor sit amet, prishtina based.<span class="blink">_</span></p>
+    <nav aria-label="Site">
+      <a href="#">archive</a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
+    </nav>
+    <div class="block">
+      <p class="label">tags</p>
+      <div class="tags">
+        <a href="#">#essays</a><a href="#">#film photos</a><a href="#">#notes to self</a>
+        <a href="#">#city</a><a href="#">#animals</a><a href="#">#lorem</a><a href="#">#ipsum</a>
+      </div>
+    </div>
+    <div class="block now-block">
+      <p class="label">right now</p>
+      <ul class="now">
+        <li>reading: lorem ipsum dolor</li>
+        <li>listening: sit amet on repeat</li>
+        <li>mood: overcast, but fine</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- hero collage -->
+    <header class="hero">
+      <figure class="photo drag" style="--r:-8deg;width:200px;left:4%;top:40px"><span class="img s-sunset"></span><figcaption>summer, kinda</figcaption></figure>
+      <figure class="photo drag tape-corners" style="--r:6deg;width:170px;right:6%;top:30px"><span class="img s-night" style="--ar:1/1"></span><figcaption>3am walk home</figcaption></figure>
+      <figure class="photo drag torn bare" style="--r:-3deg;width:230px;left:12%;bottom:40px"><span class="img s-sea" style="--ar:3/2"></span></figure>
+      <figure class="photo drag pin hide-sm" style="--r:9deg;width:160px;right:20%;bottom:30px"><span class="img s-garden"></span><figcaption>grandma's yard</figcaption></figure>
+      <figure class="photo drag no-tape" style="--r:-12deg;width:130px;right:3%;top:52%"><span class="img s-bw" style="--ar:1/1"></span><figcaption>me??</figcaption></figure>
+      <figure class="photo drag hide-sm" style="--r:4deg;width:140px;left:34%;top:20px"><span class="img s-street" style="--ar:3/2"></span><figcaption>red stripe</figcaption></figure>
+
+      <div class="title">
+        <h1 class="ransom" aria-label="paper cuts">
+          <span class="r1">pa</span><span class="r2">P</span><span class="r3">er</span><span class="gap"></span><span class="r4">C</span><span class="r5">uts</span>
+        </h1>
+        <div class="issue">issue no. 03 · autumn 2026 · 3 pieces</div>
+      </div>
+
+      <div class="note" style="left:6%;top:47%">new stuff<br>below ↓</div>
+      <div class="stamp hide-sm" style="right:34%;top:68%;transform:rotate(-8deg)">handmade</div>
+      <svg class="star" viewBox="0 0 64 64" style="left:46%;bottom:60px;transform:rotate(12deg)" aria-hidden="true"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      <div class="hint">tap "edit layout" to move stuff ↓</div>
+    </header>
+
+    <div class="feed">
+      <!-- post 1 -->
+      <article class="post">
+        <div class="gutter left">
+          <figure class="photo drag" style="--r:-6deg"><span class="img s-flash"></span><figcaption>kitchen, flash on</figcaption></figure>
+          <figure class="photo drag torn bare" style="--r:5deg"><span class="img s-blue" style="--ar:1/1"></span></figure>
+        </div>
+        <div class="text">
+          <div class="meta"><span class="cat">essay</span><span>oct 12, 2026</span><span>· 6 min read</span></div>
+          <h3>lorem ipsum and <mark>the art of</mark> <span class="pink">leaving early</span></h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, <span class="cutout">sunt in culpa qui officia</span> deserunt mollit anim id est laborum.</p>
+          <blockquote class="pull">"curabitur pretium tincidunt lacus, nulla gravida orci a odio."</blockquote>
+          <p>Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit.</p>
+          <p>Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi.</p>
+          <div class="post-foot">
+            <div class="t"><a href="#">#essays</a><a href="#">#notes to self</a><a href="#">#lorem</a></div>
+            <div class="acts">
+              <span class="notes">214 notes</span>
+              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
+              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="gutter right">
+          <figure class="photo drag pin" style="--r:7deg"><span class="img s-street"></span><figcaption>bus stop, 7:40</figcaption></figure>
+          <figure class="photo drag tape-corners" style="--r:-4deg"><span class="img s-garden" style="--ar:1/1"></span><figcaption>pink ones</figcaption></figure>
+        </div>
+      </article>
+
+      <!-- photo spread -->
+      <section class="spread" aria-label="Photo spread">
+        <figure class="photo drag" style="--r:-10deg;width:180px;left:5%;top:30px"><span class="img s-night"></span><figcaption>city lights</figcaption></figure>
+        <figure class="photo drag torn bare hide-sm" style="--r:4deg;width:220px;left:24%;top:150px"><span class="img s-sunset" style="--ar:3/2"></span></figure>
+        <figure class="photo drag" style="--r:8deg;width:170px;right:8%;top:40px"><span class="img s-pinkroom"></span><figcaption>my room</figcaption></figure>
+        <figure class="photo drag pin hide-sm" style="--r:-5deg;width:150px;right:28%;top:180px"><span class="img s-sea" style="--ar:1/1"></span><figcaption>ulcinj</figcaption></figure>
+        <div class="scrawl">photo dump, no context</div>
+      </section>
+
+      <!-- post 2 -->
+      <article class="post">
+        <div class="gutter left">
+          <figure class="photo drag no-tape" style="--r:-9deg"><span class="img s-bw"></span><figcaption>old scan</figcaption></figure>
+        </div>
+        <div class="text">
+          <div class="meta"><span class="cat">notes</span><span>oct 03, 2026</span><span>· 3 min read</span></div>
+          <h3><span class="pink">dolor sit</span> amet, a <mark>list of small things</mark></h3>
+          <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum.</p>
+          <figure class="photo inline-photo drag" style="--r:2deg"><span class="img s-sea" style="--ar:3/2"></span><figcaption>lorem ipsum at the beach</figcaption></figure>
+          <p>Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris.</p>
+          <p>Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus.</p>
+          <div class="post-foot">
+            <div class="t"><a href="#">#notes to self</a><a href="#">#ipsum</a></div>
+            <div class="acts">
+              <span class="notes">88 notes</span>
+              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
+              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="gutter right">
+          <figure class="photo drag" style="--r:6deg"><span class="img s-flash" style="--ar:1/1"></span><figcaption>birthday blur</figcaption></figure>
+          <figure class="photo drag torn bare" style="--r:-3deg"><span class="img s-night" style="--ar:3/4"></span></figure>
+        </div>
+      </article>
+
+      <!-- post 3 -->
+      <article class="post">
+        <div class="gutter left">
+          <figure class="photo drag pin" style="--r:5deg"><span class="img s-garden"></span><figcaption>mramor, spring</figcaption></figure>
+          <figure class="photo drag" style="--r:-7deg"><span class="img s-blue" style="--ar:1/1"></span><figcaption>blue hour</figcaption></figure>
+        </div>
+        <div class="text">
+          <div class="meta"><span class="cat">poem-ish</span><span>sep 21, 2026</span><span>· 2 min read</span></div>
+          <h3>consectetur, <mark>or how the</mark> light gets in</h3>
+          <p>Fusce convallis metus id felis luctus adipiscing. Pellentesque egestas, neque sit amet convallis pulvinar, justo nulla eleifend augue, ac auctor orci leo non est. Quisque id mi.</p>
+          <blockquote class="pull">"ut tincidunt tincidunt erat, aenean posuere tortor sed cursus."</blockquote>
+          <p>Phasellus gravida semper nisi. Nullam vel sem. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Sed hendrerit. Morbi ac felis.</p>
+          <div class="post-foot">
+            <div class="t"><a href="#">#poem-ish</a><a href="#">#animals</a><a href="#">#film photos</a></div>
+            <div class="acts">
+              <span class="notes">1,032 notes</span>
+              <button type="button" aria-label="Reblog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
+              <button type="button" class="like" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2.2 0 3.6 1.3 5.4 3.3C13.8 6.3 15.2 5 17.4 5c3.4 0 5.6 3.3 4.1 6.8C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="gutter right">
+          <figure class="photo drag tape-corners" style="--r:-5deg"><span class="img s-sunset" style="--ar:3/4"></span><figcaption>last warm day</figcaption></figure>
+        </div>
+      </article>
+    </div>
+
+    <footer class="end">
+      <div class="ransom" aria-label="the end">
+        <span class="r3">the</span><span class="gap"></span><span class="r1">E</span><span class="r2">n</span><span class="r4">d</span>
+      </div>
+      <p>photocopied with love · more next issue · <a href="#">older posts →</a></p>
+    </footer>
+    <div class="board" id="board" aria-label="Your added photos"></div>
+  </main>
+</div>
+
+<div class="dock" role="toolbar" aria-label="Layout editor">
+  <button type="button" id="edit-toggle" class="primary">✎ edit layout</button>
+  <div class="dock-edit grp">
+    <label class="btn" for="add-input">+ add photos</label>
+    <input id="add-input" type="file" accept="image/*" multiple hidden>
+    <span class="tiny no-sel-msg">click a photo to select it</span>
+    <div class="sel-tools grp">
+      <span class="sep"></span>
+      <button type="button" data-act="rotl" aria-label="Rotate left">⟲</button>
+      <button type="button" data-act="rotr" aria-label="Rotate right">⟳</button>
+      <button type="button" data-act="smaller" aria-label="Smaller">−</button>
+      <button type="button" data-act="bigger" aria-label="Bigger">+</button>
+      <button type="button" data-act="frame" id="frame-btn">frame: tape</button>
+      <label class="btn" for="replace-input">swap pic</label>
+      <input id="replace-input" type="file" accept="image/*" hidden>
+      <button type="button" data-act="front">to front</button>
+      <button type="button" data-act="delete">delete</button>
+    </div>
+    <span class="sep"></span>
+    <button type="button" id="export-btn">export</button>
+    <button type="button" id="reset-btn">reset</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+<div class="export" id="export" hidden>
+  <div class="row"><span>your layout (send this to me and I'll bake it into the real site)</span><button type="button" id="export-close">close</button></div>
+  <textarea id="export-text" readonly aria-label="Layout data"></textarea>
+</div>
+
+<script>
+// like buttons
+document.querySelectorAll('.like').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const on=b.getAttribute('aria-pressed')!=='true';
+    b.setAttribute('aria-pressed',on);
+    const n=b.parentElement.querySelector('.notes');
+    const v=parseInt(n.textContent.replace(/\D/g,''),10)+(on?1:-1);
+    n.textContent=v.toLocaleString('en-US')+' notes';
+  });
+});
+
+/* ================= layout editor ================= */
+const KEY='papercuts-layout-v1';
+let state={photos:{},added:[]};
+try{const s=localStorage.getItem(KEY);if(s){const p=JSON.parse(s);if(p&&p.photos&&p.added)state=p}}catch(e){}
+
+const $=s=>document.querySelector(s);
+const board=$('#board'),toastEl=$('#toast');
+let toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>toastEl.hidden=true,2600)}
+let saveT;
+function save(){
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{
+    try{localStorage.setItem(KEY,JSON.stringify(state))}
+    catch(e){toast("couldn't save, browser storage is full or blocked. changes stay until you reload")}
+  },150);
+}
+
+const FRAMES=['tape','corner','pin','torn','plain','raw'];
+const FRAME_NAME={tape:'tape',corner:'corner tape',pin:'pin',torn:'torn edge',plain:'polaroid',raw:'just the pic'};
+const FRAME_CLS={tape:'',corner:'tape-corners',pin:'pin',torn:'torn bare',plain:'no-tape',raw:'bare no-tape'};
+const ALLCLS=['tape-corners','pin','torn','bare','no-tape'];
+function frameOf(el){
+  if(el.classList.contains('torn'))return'torn';
+  if(el.classList.contains('bare'))return'raw';
+  if(el.classList.contains('pin'))return'pin';
+  if(el.classList.contains('tape-corners'))return'corner';
+  if(el.classList.contains('no-tape'))return'plain';
+  return'tape';
+}
+function setFrame(el,f){
+  ALLCLS.forEach(c=>el.classList.remove(c));
+  FRAME_CLS[f].split(' ').filter(Boolean).forEach(c=>el.classList.add(c));
+}
+
+let zTop=20;
+function apply(el){
+  const r=el._rec;
+  el.style.setProperty('--dx',(r.dx||0)+'px');
+  el.style.setProperty('--dy',(r.dy||0)+'px');
+  el.style.setProperty('--r',(r.r||0)+'deg');
+  el.style.setProperty('--s',r.s||1);
+  setFrame(el,r.frame);
+  if(r.cap!=null)el.querySelector('figcaption').textContent=r.cap;
+  if(r.src)el.querySelector('.img').style.background='center/cover no-repeat url("'+r.src+'")';
+  if(r.z){el.style.zIndex=r.z;zTop=Math.max(zTop,r.z)}
+  el.hidden=!!r.hidden;
+}
+
+function init(el,rec){
+  el._rec=rec;
+  if(rec.frame==null)rec.frame=frameOf(el);
+  if(rec.r==null)rec.r=parseFloat(el.style.getPropertyValue('--r'))||0;
+  if(!el.querySelector('figcaption'))el.append(document.createElement('figcaption'));
+  const hr=document.createElement('span');hr.className='h-rot';hr.title='drag to rotate';
+  const hs=document.createElement('span');hs.className='h-size';hs.title='drag to resize';
+  el.append(hr,hs);
+  el.classList.remove('drag');
+  apply(el);
+  wire(el);
+}
+
+// built-in photos get ids from their order on the page
+document.querySelectorAll('.main .photo').forEach((el,i)=>{
+  const id='p'+i;el.dataset.id=id;
+  const cap=el.querySelector('figcaption'),img=el.querySelector('.img');
+  el._orig={r:parseFloat(el.style.getPropertyValue('--r'))||0,frame:frameOf(el),
+    cap:cap?cap.textContent:'',bg:img.style.background};
+  state.photos[id]=state.photos[id]||{};
+  init(el,state.photos[id]);
+});
+
+function makeAdded(rec){
+  const f=document.createElement('figure');
+  f.className='photo';f.dataset.id=rec.id;
+  f.style.left=rec.left+'%';f.style.top=rec.top+'px';f.style.width=(rec.w||200)+'px';
+  f.innerHTML='<span class="img"></span><figcaption></figcaption>';
+  f.querySelector('.img').style.setProperty('--ar',rec.ar||'4/5');
+  board.append(f);init(f,rec);
+  return f;
+}
+state.added.forEach(makeAdded);
+
+/* selection */
+let sel=null;
+function select(el){
+  if(sel&&sel!==el)sel.classList.remove('sel');
+  sel=el;
+  if(el){
+    el.classList.add('sel');
+    el._rec.z=++zTop;el.style.zIndex=el._rec.z;
+    $('#frame-btn').textContent='frame: '+FRAME_NAME[el._rec.frame];
+  }
+  document.body.classList.toggle('has-sel',!!el);
+}
+
+/* edit mode */
+let editing=false;
+function setEditing(on){
+  editing=on;
+  document.body.classList.toggle('editing',on);
+  $('#edit-toggle').textContent=on?'✓ done':'✎ edit layout';
+  document.querySelectorAll('.photo figcaption').forEach(c=>c.contentEditable=on?'true':'false');
+  if(!on){select(null);save()}
+}
+$('#edit-toggle').addEventListener('click',()=>setEditing(!editing));
+
+/* drag, rotate, resize with mouse or finger */
+function wire(el){
+  let mode=null,pid=null,st={};
+  el.addEventListener('pointerdown',e=>{
+    if(!editing||(e.pointerType==='mouse'&&e.button!==0))return;
+    if(e.target.tagName==='FIGCAPTION'){select(el);return}
+    select(el);
+    mode=e.target.classList.contains('h-rot')?'rot':e.target.classList.contains('h-size')?'size':'move';
+    pid=e.pointerId;el.setPointerCapture(pid);el.classList.add('dragging');
+    const b=el.getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2;
+    const r=el._rec;
+    st={x:e.clientX,y:e.clientY,dx:r.dx||0,dy:r.dy||0,r:r.r||0,s:r.s||1,cx,cy,
+        a:Math.atan2(e.clientY-cy,e.clientX-cx),d:Math.hypot(e.clientX-cx,e.clientY-cy)||1};
+    e.preventDefault();
+  });
+  el.addEventListener('pointermove',e=>{
+    if(e.pointerId!==pid)return;
+    const r=el._rec;
+    if(mode==='move'){r.dx=Math.round(st.dx+e.clientX-st.x);r.dy=Math.round(st.dy+e.clientY-st.y)}
+    else if(mode==='rot'){
+      const a=Math.atan2(e.clientY-st.cy,e.clientX-st.cx);
+      let deg=st.r+(a-st.a)*180/Math.PI;
+      if(e.shiftKey)deg=Math.round(deg/15)*15;
+      r.r=Math.round(deg*10)/10;
+    }else if(mode==='size'){
+      const d=Math.hypot(e.clientX-st.cx,e.clientY-st.cy);
+      r.s=Math.round(Math.min(3,Math.max(.35,st.s*d/st.d))*100)/100;
+    }
+    apply(el);
+  });
+  const end=e=>{if(e.pointerId!==pid)return;pid=null;mode=null;el.classList.remove('dragging');save()};
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+  el.querySelector('figcaption').addEventListener('input',e=>{el._rec.cap=e.target.textContent;save()});
+}
+
+// click empty space to deselect
+document.addEventListener('pointerdown',e=>{
+  if(!editing)return;
+  if(e.target.closest('.photo,.dock,.export'))return;
+  select(null);
+});
+
+/* toolbar actions */
+function act(a){
+  if(!sel)return;
+  const r=sel._rec;
+  if(a==='rotl')r.r=(r.r||0)-5;
+  if(a==='rotr')r.r=(r.r||0)+5;
+  if(a==='smaller')r.s=Math.max(.35,Math.round(((r.s||1)-.1)*100)/100);
+  if(a==='bigger')r.s=Math.min(3,Math.round(((r.s||1)+.1)*100)/100);
+  if(a==='frame'){r.frame=FRAMES[(FRAMES.indexOf(r.frame)+1)%FRAMES.length];$('#frame-btn').textContent='frame: '+FRAME_NAME[r.frame]}
+  if(a==='front'){r.z=++zTop}
+  if(a==='delete'){
+    if(sel.parentElement===board){
+      state.added=state.added.filter(x=>x!==r);sel.remove();
+    }else{r.hidden=true;apply(sel)}
+    select(null);save();toast('photo removed. "reset" brings the original ones back');return;
+  }
+  apply(sel);save();
+}
+document.querySelectorAll('.sel-tools [data-act]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.act)));
+
+// keyboard: arrows move, [ ] rotate, - = resize, delete removes
+document.addEventListener('keydown',e=>{
+  if(!editing||!sel)return;
+  if(e.target.isContentEditable||e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+  const r=sel._rec,step=e.shiftKey?20:4;
+  const map={ArrowLeft:()=>r.dx=(r.dx||0)-step,ArrowRight:()=>r.dx=(r.dx||0)+step,ArrowUp:()=>r.dy=(r.dy||0)-step,ArrowDown:()=>r.dy=(r.dy||0)+step,
+    '[':()=>r.r=(r.r||0)-2,']':()=>r.r=(r.r||0)+2,'-':()=>r.s=Math.max(.35,(r.s||1)-.05),'=':()=>r.s=Math.min(3,(r.s||1)+.05)};
+  if(map[e.key]){e.preventDefault();map[e.key]();apply(sel);save()}
+  else if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();act('delete')}
+  else if(e.key==='Escape')select(null);
+});
+
+/* adding your own photos */
+function readImg(file){
+  return new Promise((res,rej)=>{
+    const u=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{
+      const w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,900/Math.max(w,h));
+      const c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      URL.revokeObjectURL(u);res({src:c.toDataURL('image/jpeg',.82),ar:w+'/'+h});
+    };
+    im.onerror=()=>{URL.revokeObjectURL(u);rej()};
+    im.src=u;
+  });
+}
+$('#add-input').addEventListener('change',async e=>{
+  const files=[...e.target.files];e.target.value='';
+  if(!files.length)return;
+  if(!editing)setEditing(true);
+  const main=$('.main').getBoundingClientRect();
+  const baseTop=Math.max(20,innerHeight*.25-main.top);
+  let last=null;
+  for(const [i,f] of files.entries()){
+    try{
+      const {src,ar}=await readImg(f);
+      const rec={id:'a'+Date.now()+i,left:Math.round(25+Math.random()*40),top:Math.round(baseTop+i*36),
+        w:200,ar,src,cap:'',frame:'tape',r:Math.round(Math.random()*16-8),s:1};
+      state.added.push(rec);last=makeAdded(rec);
+    }catch(err){toast("couldn't open "+f.name+", try a jpg or png")}
+  }
+  if(last)select(last);
+  save();
+});
+$('#replace-input').addEventListener('change',async e=>{
+  const f=e.target.files[0];e.target.value='';
+  if(!f||!sel)return;
+  try{const {src}=await readImg(f);sel._rec.src=src;apply(sel);save()}
+  catch(err){toast("couldn't open that file, try a jpg or png")}
+});
+
+/* export + reset */
+$('#export-btn').addEventListener('click',()=>{
+  const box=$('#export'),ta=$('#export-text');
+  ta.value=JSON.stringify(state);box.hidden=false;ta.focus();ta.select();
+  if(navigator.clipboard)navigator.clipboard.writeText(ta.value).then(()=>toast('layout copied'),()=>{});
+});
+$('#export-close').addEventListener('click',()=>$('#export').hidden=true);
+let resetArmed=false,resetT;
+$('#reset-btn').addEventListener('click',e=>{
+  const b=e.currentTarget;
+  if(!resetArmed){resetArmed=true;b.textContent='sure? click again';b.classList.add('warn');
+    resetT=setTimeout(()=>{resetArmed=false;b.textContent='reset';b.classList.remove('warn')},3000);return}
+  clearTimeout(resetT);resetArmed=false;b.textContent='reset';b.classList.remove('warn');
+  try{localStorage.removeItem(KEY)}catch(err){}
+  select(null);
+  board.innerHTML='';
+  state={photos:{},added:[]};
+  document.querySelectorAll('.main .photo').forEach(el=>{
+    const o=el._orig;
+    el._rec=state.photos[el.dataset.id]={r:o.r,frame:o.frame};
+    el.querySelector('figcaption').textContent=o.cap;
+    el.querySelector('.img').style.background=o.bg;
+    el.style.zIndex='';
+    apply(el);
+  });
+  toast('back to the original layout');
+});
+</script>
+
+</body></html>
