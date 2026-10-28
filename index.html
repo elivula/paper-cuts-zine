@@ -2,7 +2,7 @@
 <title>Paper Cuts Zine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="published-at" content="1793183765626">
-<link rel="icon" href="logo/eli-vula-mark.svg" type="image/svg+xml">
+<link rel="icon" href="logo/eli-vula-mark.svg?v=2" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Abril+Fatface&family=Permanent+Marker&family=Pacifico&family=VT323&family=UnifrakturMaguntia&display=swap">
 <style>
@@ -454,7 +454,7 @@ body::after{opacity:.1}
 <div class="shell">
   <!-- Tumblr-style sidebar -->
   <aside class="side" aria-label="About this zine">
-    <figure class="avatar logo"><span class="img" style="--ar:1/1;height:100%;background:center/contain no-repeat url(&quot;logo/eli-vula-mark.svg&quot;)"></span></figure>
+    <figure class="avatar logo"><span class="img" style="--ar:1/1;height:100%;background:center/contain no-repeat url(&quot;logo/eli-vula-mark.svg?v=2&quot;)"></span></figure>
     <div class="who">
       <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
       <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
@@ -617,7 +617,7 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1'];
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2'];
 const pubAvatar=$('.avatar')?.cloneNode(true);
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
 const pubSet=$$('[data-set="masthead"]').map(e=>e.cloneNode(true)),pubEnd=$('.end .ransom')?.cloneNode(true);
@@ -637,6 +637,8 @@ try{
     // the logo replaces the old pink circle, but never a photo you put there yourself
     const av=$('.avatar');
     if(!(d.fixes||[]).includes('logo-v1')&&av&&pubAvatar&&av.querySelector('.img.s-pinkroom')&&!av.querySelector('.img').style.backgroundImage)av.replaceWith(pubAvatar);
+    // logo-v2: load the E-only logo fresh instead of an old saved copy
+    else if(!(d.fixes||[]).includes('logo-v2')&&av&&pubAvatar&&av.classList.contains('logo'))av.replaceWith(pubAvatar);
   }
 }catch(e){}
 
