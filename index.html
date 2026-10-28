@@ -293,9 +293,9 @@ a{color:inherit}
 .dock .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .dock .sep{width:1px;align-self:stretch;background:rgba(236,235,229,.3)}
 .dock .tiny{opacity:.7;padding:0 4px}
-.dock-edit,.sel-tools{display:none}
-.editing .dock-edit{display:flex}
-.editing.has-sel .sel-tools{display:flex}
+.dock .dock-edit,.dock .sel-tools{display:none}
+.editing .dock .dock-edit{display:flex}
+.editing.has-sel .dock .sel-tools{display:flex}
 .editing.has-sel .no-sel-msg{display:none}
 .editing{padding-bottom:140px}
 .dock .warn{background:#d23b3b;border-color:#d23b3b;color:#fff}
