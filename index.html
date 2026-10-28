@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Paper Cuts Zine</title>
+<title>Eli Vula</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="published-at" content="1793183765626">
 <link rel="icon" href="logo/eli-vula-mark.svg?v=2" type="image/svg+xml">
@@ -449,6 +449,16 @@ body::after{opacity:.1}
 .r6.tilt{transform:rotate(4deg)}
 .r7{font-family:"Playfair Display","Times New Roman",serif;font-weight:700;background:var(--paper-2);color:var(--pink);transform:rotate(3deg)}
 .r8{font-family:"Playfair Display","Times New Roman",serif;font-weight:700;background:var(--blue);color:#fff;transform:rotate(-4deg)}
+
+/* ---------- two languages: EN / SQ ---------- */
+body:not(.sq) .sq,body.sq .en{display:none!important}
+.tags>span{display:contents}
+.lang{display:flex;font-family:var(--f-label);font-size:11px;letter-spacing:.14em}
+.lang button{font:inherit;background:none;color:var(--ink);border:1px solid var(--ink);padding:3px 10px;cursor:pointer}
+.lang button+button{border-left:0}
+body:not(.sq) .lang [data-lang="en"],body.sq .lang [data-lang="sq"]{background:var(--ink);color:var(--paper)}
+.side>*{flex-shrink:0}
+@media (min-width:901px){.side .avatar{margin-inline:auto}.side .who{text-align:center}}
 </style>
 
 <div class="shell">
@@ -456,22 +466,24 @@ body::after{opacity:.1}
   <aside class="side" aria-label="About this zine">
     <figure class="avatar logo"><span class="img" style="--ar:1/1;height:100%;background:center/contain no-repeat url(&quot;logo/eli-vula-mark.svg?v=2&quot;)"></span></figure>
     <div class="who">
-      <h2>&nbsp; &nbsp; &nbsp;ELI VULA</h2>
-      <div class="url">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;elivula.com</div>
+      <h2>ELI VULA</h2>
+      <div class="url">elivula.com</div>
     </div>
-    <p class="bio">Essays, notes and photographs from Prishtina. I notice things: the hem taken up by someone who didn’t love the coat, the man who stops dead at the top of the escalator, the film everyone calls a classic and nobody has finished. I was raised on cinema I was far too young for, and I have been paying attention ever since. Trends are not covered here. They are reviewed.</p>
+    <p class="bio"><span class="en">Essays, notes and photographs. I notice things: the coat taken up by someone who didn’t love it, the man who stops dead at the top of the escalator, the film everyone calls a classic and nobody has finished. I was raised on cinema that was not meant for my age, and I have been paying attention ever since, mostly to things people would rather I didn’t. Trends are not covered here. They are reviewed.</span><span class="sq" lang="sq">Ese, shënime dhe fotografi. I vërej gjërat: pallton e shkurtuar nga dikush që s’e donte, burrin që ndalet në vend në krye të shkallëve lëvizëse, filmin që të gjithë e quajnë klasik e askush s’e ka parë deri në fund. U rrita me kinema që s’ishte për moshën time dhe që atëherë s’kam pushuar së vëzhguari, kryesisht gjërat që njerëzit do të donin të mos i vija re. Trendet nuk mbulohen këtu. Ato recensohen.</span></p>
     <nav aria-label="Site">
-      <a href="#"><br></a><a href="#">ask</a><a href="#">about</a><a href="#">submit</a>
+      <a href="#essays"><span class="en">essays</span><span class="sq" lang="sq">ese</span></a><a href="#about"><span class="en">about</span><span class="sq" lang="sq">rreth</span></a>
     </nav>
+    <div class="lang" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="sq">SQ</button></div>
     <div class="block">
-      <p class="label">tags</p>
-      <div class="tags"><br>
-      </div>
+      <p class="label"><span class="en">tags</span><span class="sq" lang="sq">etiketa</span></p>
+      <div class="tags"><span class="en"><a href="#">#criticism</a> <a href="#">#clothes</a> <a href="#">#film</a> <a href="#">#rooms</a> <a href="#">#manners</a> <a href="#">#notes</a></span><span class="sq" lang="sq"><a href="#">#kritikë</a> <a href="#">#rroba</a> <a href="#">#film</a> <a href="#">#hapësira</a> <a href="#">#sjellje</a> <a href="#">#shënime</a></span></div>
     </div>
     <div class="block now-block">
-      <p class="label">right now</p>
+      <p class="label"><span class="en">currently</span><span class="sq" lang="sq">tani për tani</span></p>
       <ul class="now">
-        <li>e</li>
+        <li class="en">watching: Twin Peaks, season two</li><li class="sq" lang="sq">po shikoj: Twin Peaks, sezoni i dytë</li>
+        <li class="en">reading: The Fran Lebowitz Reader</li><li class="sq" lang="sq">po lexoj: The Fran Lebowitz Reader</li>
+        <li class="en">wearing: whatever the trend report said not to</li><li class="sq" lang="sq">po vesh: pikërisht atë që raporti i trendeve tha të mos e vesh</li>
       </ul>
     </div>
   </aside>
@@ -480,17 +492,17 @@ body::after{opacity:.1}
     <!-- hero collage -->
     <header class="hero">
       <div class="title masthead" data-set="masthead">
-        <div class="kicker">n° 01 · prishtina · autumn 2026</div>
+        <div class="kicker"><span class="en">n° 01 · autumn 2026</span><span class="sq" lang="sq">nr. 01 · vjeshtë 2026</span></div>
         <h1 class="ransom" aria-label="Eli Vula">
           <span class="r8">E</span><span class="r6">l</span><span class="r3">i</span><span class="gap"></span><span class="r1">V</span><span class="r2">u</span><span class="r7">l</span><span class="r6 tilt">a</span>
         </h1>
-        <p class="tagline">essays, notes &amp; photographs i didn’t delete</p>
+        <p class="tagline"><span class="en">criticism of clothes, films, rooms, and the people inside them</span><span class="sq" lang="sq">kritikë për rrobat, filmat, dhomat dhe njerëzit brenda tyre</span></p>
       </div>
       <span class="star" data-set="masthead" style="left:19%;top:64%;width:44px;height:44px;transform:rotate(-14deg)" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 3l8 19 20 2-15 13 5 20-18-11-18 11 5-20L4 24l20-2z" fill="#fff275" stroke="#1b1a1f" stroke-width="2.5" stroke-linejoin="round"></path></svg></span>
       <div class="hint">tap "✎ edit" to change anything ↓</div>
     </header>
 
-    <div class="feed">
+    <div class="feed" id="essays">
       <!-- post 1 -->
       
 
@@ -502,13 +514,32 @@ body::after{opacity:.1}
 
       <!-- post 3 -->
       
+
+      <article class="post about" id="about">
+        <div class="gutter left"></div>
+        <div class="text">
+          <div class="meta"><span class="cat"><span class="en">about</span><span class="sq" lang="sq">rreth</span></span></div>
+          <h3><span class="en">who is <mark>paying attention</mark></span><span class="sq" lang="sq">kush po <mark>i kushton vëmendje</mark></span></h3>
+          <div class="en">
+          <p>Eli Vula writes criticism the way some people take inventory: slowly, and with the lights on. The subjects are clothes, films, rooms and manners, and the question is always the same, which is whether anyone was paying attention. Usually the answer is no. Here, someone was.</p>
+          <p>This is not a lifestyle blog. Nothing is for sale, nobody is sponsored, and no one will be told to love themselves. There are essays, there are notes, and there are photographs that were not deleted for a reason.</p>
+          <p>Written for anyone, anywhere, who has ever stood in a room and silently corrected it.</p>
+        </div>
+          <div class="sq" lang="sq">
+          <p>Eli Vula shkruan kritikë ashtu siç disa njerëz bëjnë inventar: ngadalë dhe me dritat ndezur. Temat janë rrobat, filmat, dhomat dhe sjelljet, e pyetja është gjithmonë e njëjta: a po i kushtonte dikush vëmendje? Zakonisht përgjigjja është jo. Këtu, dikush po i kushtonte.</p>
+          <p>Ky nuk është blog për stil jetese. Asgjë nuk shitet, askush nuk sponsorizohet dhe askujt nuk do t’i thuhet ta dojë veten. Ka ese, ka shënime dhe ka fotografi që nuk u fshinë me arsye.</p>
+          <p>Shkruar për këdo, kudo, që ka qëndruar ndonjëherë në një dhomë dhe e ka korrigjuar në heshtje.</p>
+        </div>
+        </div>
+        <div class="gutter right"></div>
+      </article>
     </div>
 
     <footer class="end">
       <div class="ransom" aria-label="fin">
         <span class="r6">f</span><span class="r8">i</span><span class="r3">n.</span>
       </div>
-      <p><br></p>
+      <p><span class="en">made by hand · no algorithm was consulted</span><span class="sq" lang="sq">bërë me dorë · asnjë algoritëm nuk u konsultua</span></p>
     </footer>
     <div class="board" id="board" aria-label="Your added photos"></div>
   </main>
@@ -583,6 +614,17 @@ body::after{opacity:.1}
 </div>
 
 <script type="module">
+const pickedLang=new URLSearchParams(location.search).get('lang')
+  ||(()=>{try{return localStorage.getItem('papercuts-lang')}catch(e){return null}})()
+  ||(/^sq\b/i.test(navigator.language)?'sq':'en');
+function setLang(l){
+  document.body.classList.toggle('sq',l==='sq');
+  document.documentElement.lang=l;
+  try{localStorage.setItem('papercuts-lang',l)}catch(e){}
+}
+setLang(pickedLang==='sq'?'sq':'en');
+document.addEventListener('click',e=>{const b=e.target.closest('.lang [data-lang]');if(b)setLang(b.dataset.lang)});
+
 // like buttons (delegated, so new posts get them too)
 document.addEventListener('click',e=>{
   const b=e.target.closest('.like');
@@ -617,9 +659,9 @@ store.del('papercuts-layout-v1');
 
 // bring back unpublished changes made on this device
 // changes made to the page outside the editor are carried into older drafts once, by id
-const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2'];
-const OLD_BIO='Essays, notes and photographs, written in Prishtina. Mostly about taste: clothes, films, rooms, and the people who stand in doorways. I watched films I was far too young for, with my mother, and nobody noticed I was paying attention. I still am. Trends are not discussed here, only judged.';
-const pubBio=$('.bio')?.innerHTML;
+const FIXES=['title-eli-vula','masthead-v1','no-hello-v1','logo-v1','logo-v2','bio-v1','bio-v2','bilingual-v1'];
+const BILINGUAL=['.bio','.side nav','.side .lang','.side .block:not(.now-block)','.side .now-block','.masthead .kicker','.masthead .tagline','.end p','#about'];
+const pubParts=BILINGUAL.map(s=>[s,$(s)?.cloneNode(true)]);
 const pubAvatar=$('.avatar')?.cloneNode(true);
 const pubTitle=$('.hero .title .ransom')?.cloneNode(true);
 const pubSet=$$('[data-set="masthead"]').map(e=>e.cloneNode(true)),pubEnd=$('.end .ransom')?.cloneNode(true);
@@ -641,11 +683,17 @@ try{
     if(!(d.fixes||[]).includes('logo-v1')&&av&&pubAvatar&&av.querySelector('.img.s-pinkroom')&&!av.querySelector('.img').style.backgroundImage)av.replaceWith(pubAvatar);
     // logo-v2: load the E-only logo fresh instead of an old saved copy
     if(!(d.fixes||[]).includes('logo-v2')&&av&&pubAvatar&&av.classList.contains('logo'))av.replaceWith(pubAvatar);
-    // bio-v1: fill the sidebar description, only if you left it empty
-    const bio=$('.bio');
-    if(!(d.fixes||[]).includes('bio-v1')&&bio&&pubBio&&!bio.textContent.trim())bio.innerHTML=pubBio;
-    // bio-v2: the sharper description replaces the first one, never words you wrote yourself
-    else if(!(d.fixes||[]).includes('bio-v2')&&bio&&pubBio&&bio.textContent.trim()===OLD_BIO)bio.innerHTML=pubBio;
+    if(!(d.fixes||[]).includes('bilingual-v1')){
+      for(const [s,e] of pubParts){
+        if(!e)continue;
+        const cur=$(s);
+        if(cur)cur.replaceWith(e);
+        else if(s==='.side .lang')$('.side nav')?.after(e);
+        else if(s==='#about')$('.feed')?.append(e);
+      }
+      const feed=$('.feed');if(feed)feed.id='essays';
+      $$('.side h2,.side .url').forEach(x=>x.innerHTML=x.innerHTML.replace(/^(?:\s|&nbsp;)+/,''));
+    }
   }
 }catch(e){}
 
